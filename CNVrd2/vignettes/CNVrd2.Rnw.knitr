@@ -1,0 +1,444 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage{a4wide}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{relsize}
+\usepackage{listings}
+\usepackage[round]{natbib}
+\usepackage{float}
+\hypersetup{colorlinks = true, linkcolor = blue}
+
+\usepackage{makeidx}
+\usepackage{titlesec}
+\setcounter{tocdepth}{5}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{authblk}
+\makeindex{}
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{A Markdown Vignette with knitr}
+
+\title{\textbf{CNVrd2: A package for measuring gene copy number, identifying SNPs tagging copy number variants, and detecting copy number polymorphic genomic regions}}
+\date{September 15, 2013}
+
+\author[1,2]{Hoang Tan Nguyen}
+\author[1]{Tony R Merriman}
+\author[1]{Michael A Black}
+\affil[1]{Department of Biochemistry, University of Otago}
+\affil[2]{Department of Mathematics and Statistics, University of Otago}
+
+\renewcommand\Authands{ and }
+\begin{document}
+
+\maketitle{}
+\doublespacing
+\tableofcontents
+
+<<setup, include=FALSE, cache=FALSE, eval = TRUE>>=
+library(knitr)
+opts_chunk$set(fig.path='./figures/CNVrd2-', 
+               fig.align='center', fig.show='asis', 
+               eval = TRUE, fig.width = 6,
+               fig.height = 6, size='small')
+options(replace.assign=TRUE,width=90)
+@
+
+
+<<options,echo=FALSE>>=
+options(width=72)
+@
+
+
+
+
+\section{Introduction}
+The \emph{CNVrd2} package \footnote{CNVrd2 is an improved version of the pipeline \emph{CNVrd} used to identify tagSNPs of \emph{FCGR3A/B} CNV} \citep{nguyen2013cnvrd} utilizes next-generation sequencing (NGS) data to measure human-gene copy number (CN) and identify single-nucleotide polymorphisms (SNPs), and insertions and deletions (INDELs) that are in linkage disequilibrium with a gene of interest.  Typically, the data being used are low- or medium-coverage whole genome sequence (WGS) data from multiple individuals in a population. Such data comprise collections of sequence reads that have been aligned (or "mapped") to an appropriate reference genome. Changes in read depth (i.e., the number of reads aligned to a specific region of the genome) can indicate changes in DNA copy number in this region (i.e., deletions or duplications of specific portions of DNA). If this region encompasses a gene, then changes in copy number may also be reflected by changes in gene activity - such changes have been shown to be associated with altered risk of disease in human populations, and altered trait distributions in agricultural settings.
+
+To measure gene CN, \emph{CNVrd2} firstly divides a region (usually at least 1Mb) flanking a gene of interest into constant-sized windows, and counts reads mapped in these windows. Next, these read-count windows are transformed and standardized. After that, the \emph{DNAcopy} package \citep{venkatraman2007faster} is used to join the per-window standardized counts into regions (or "segments") of similar values. The package then refines the segmentation step and outputs segmentation results, namely segmentation scores (SS), for each sample. A function in the \emph{CNVrd2} package is then used to group SSs into copy number groups.
+
+To calculate linkage disquilibrium (LD) between gene CNVs and SNPs/INDELs nearby, SNPs/INDELs are coded into numeric values (0, 1, 2) and Fisher's Exact Test is used to assess associations between SNPs/INDELs and copy number.  \emph{CNVrd2} is designed to identify SNPs/INDELs that can be used as a surrogate marker for CNVs, therefore multiple samples are needed to obtain reliable results.  The package also uses distribution quantiles to identify highly polymorphic regions of the genome (within a collection of samples) and can identify regions with variable polymorphism between populations.  The BAM format \citep{li2009sequence} for aligned-NGS data and VCF format \citep{danecek2011variant} for structural variant information are used as the main forms of input for the package. 
+
+\section{Getting started}
+First, we load the package in our R session.  Note that the \emph{rjags} package \citep{plummer2013package} requires the associated JAGS application to be installed.
+ 
+<<warning=FALSE, results="hide">>=
+library('CNVrd2')
+@ 
+
+\noindent
+\textbf{Working with BAM and VCF files.}
+
+\noindent
+The following section describes the workflow of the \emph{CNVrd2} package in reading BAM and VCF files into R.  The 58 MXL-sample BAM files (chr1:161100000-162100000) were downloaded from the 1000 Genomes Project to measure copy number counts of \emph{FCGR3B} gene (chr1:161592986-161601753). Users can download the aligned data in the file \textit{MXLexample.zip} from
+
+\url{http://code.google.com/p/cnvrdfortagsnps/downloads/list} 
+
+\noindent
+and unzip it into a directory.  Alternatively, to run the example without downloading the associated BAM files, users can skip to section \ref{subsectionsegmentation} to load a pre-processed verison of the same data.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Measuring FCGR3B copy number}
+\subsubsection{CNVrd2 object} 
+We need to make an object of class \emph{CNVrd2} to define a region we want to investigate (regions sized > 1Mb tend to work well - multiple genes can be included by specifying the start and end positions of each). Here, we choose 1000bp-constant windows. We also need to supply a directory that consists of BAM files including only mapped reads. Users who have \textbf{not downloaded the BAM files}, should skip to section \ref{subsectionsegmentation}
+<<warning=FALSE, results="hide", eval=FALSE>>=
+objectCNVrd2 <- new("CNVrd2", windows = 1000, chr = "chr1",
+                    st = 161100001, en = 162100000,
+                    dirBamFile = "BamMXL",
+                    genes = c(161592986, 161601753),
+                    geneNames = "3B")
+
+@
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Count reads in windows}
+Use the function \emph{countReadInWindow} to read the BAM files into R and count the number of reads in each of the windows. 
+<<warnings=FALSE, results="hide", eval=FALSE>>=
+readCountMatrix <- countReadInWindow(Object = objectCNVrd2, correctGC = TRUE)
+
+@ 
+
+\noindent
+If GC-content correcion is selected (\emph{correctGC=TRUE}) then a reference genome must be supplied. The default reference genome is the human reference genome (UCSC version hg19). A full list of reference genomes available through Bioconductor can be obtained from:
+
+\url{http://www.bioconductor.org/packages/release/bioc/html/BSgenome.html}
+
+\subsubsection{Segmentation}
+\label{subsectionsegmentation}
+Use the function \textit{segmentSamples} to segment and obtain segmentation scores for the \emph{FCGR3B} gene (Figure \ref{fig:fcgr3bSS}):
+<<warning=FALSE, results="hide", fig.keep='none', eval=FALSE>>=
+##Obtain segmentation scores
+resultSegment <- segmentSamples(Object = objectCNVrd2, stdCntMatrix = readCountMatrix)
+@ 
+
+\noindent
+\textbf{\textcolor{blue}{Instead of reading BAM files directly, we can use a matrix of read counts}} for the function \emph{segmentSamples}. Here, we obtain a read-count matrix from data in the \emph{CNVrd2} package.
+<<'fcgr3bSS', fig.show='asis', results="hide", fig.cap='FCGR3B segmentation score.'>>=
+##Load data into R
+data(fcgr3bMXL)
+##Reload readCountMatrix
+readCountMatrix <- resultSegment$stdCntMatrix
+##Take a quick look the data
+readCountMatrix[1:2, 1:2]
+##Make a CNVrd2 object 
+objectCNVrd2 <- new("CNVrd2", windows = 1000, chr = "chr1",
+                    st = 161100001, en = 162100000,
+                    dirBamFile = "BamMXL",
+                    genes = c(161592986, 161601753),
+                    geneNames = "3B")
+##Obtain segmentation scores
+resultSegment <- segmentSamples(Object = objectCNVrd2, stdCntMatrix = readCountMatrix)
+##View these segmentation results
+sS <- resultSegment$segmentationScores
+hist(sS[, 1], 100, xlab = 'Segmentation score', main = '')
+@ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Obtain copy number count}
+The data in Figure \ref{fig:fcgr3bSS} suggest four distinct groups of segmentation scores, likely related to four different copy number genotypes. The function \emph{groupCNVs} uses a normal mixture model to
+cluster SSs into groups. Unequal variances are assumed by default (\emph{EV = FALSE}), however, if there are relatively few SS values in one group then we can set 
+\emph{EV = TRUE} (see the \emph{groupCNVs} manual page for additional details).
+<<'fcgr3b4CNs', fig.show='asis', results="hide",warning=FALSE, fig.cap='FCGR3B CN groups.'>>=
+objectCluster <- new("clusteringCNVs",
+                     x = resultSegment$segmentationScores[, 1], k = 4, EV = TRUE)
+#Cluster into 4 groups
+copynumberGroups <- groupCNVs(Object = objectCluster)
+
+@ 
+Clustering results are shown in Figure \ref{fig:fcgr3b4CNs}, and the group assignments for the samples are contained in the \emph{allGroups} object. For example, the NA19648 sample is assigned to the second group because the probability associated with membership of this group is higher than that of the other groups (nearly 1). 
+
+
+<<warning=FALSE>>=
+copynumberGroups$allGroups[1:3, ]
+@ 
+If we would like to force outliers into the lowest or highest CN genotype groups (e.g., dividing the data into three groups: deletions, normal CN, duplications) then we can use options \emph{rightLimit} (Figure \ref{fig:fcgr3b3CNs}) or \emph{leftLimit} or both.
+<<'fcgr3b3CNs', fig.show='asis', results="hide",warning=FALSE, fig.cap = 'FCGR3B CN groups (rightLimit = 1.5).'>>=
+#Set right limit = 1.5 to make values > 1.5 be into the largest group.
+objectCluster <- new("clusteringCNVs",
+                     x = resultSegment$segmentationScores[, 1], k = 3, EV = TRUE)
+copynumberGroups <- groupCNVs(Object = objectCluster, rightLimit = 1.5)
+@ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Plots}
+The function \emph{plotCNVrd2} can plot multiple samples. Trace plots of some of the samples exhibiting duplications at the FCGR locus are shown in Figure \ref{fig:fcgr3bdupSamples}. Here, based on information from the literature, we assume that a copy number of two is the most common CN genotype.
+<<'fcgr3bdupSamples', fig.show='asis', warning=FALSE, fig.cap='MXL duplicated samples.', size='small'>>=
+allGroups <- copynumberGroups$allGroups
+###Obtain names of duplicate samples
+duplicatedSamples <- rownames(allGroups[allGroups[, 2] > 2,])
+###Plot 6 duplicate samples
+par(mfrow = c(3, 2))
+for (ii in duplicatedSamples[1:6])
+    plotCNVrd2(Object = objectCNVrd2,
+                         
+               segmentObject = resultSegment,
+               
+                             
+               sampleName = ii)
+
+@ 
+\subsection{Identifying tag SNPs/INDELs for FCGR3B CNVs}
+
+The function \emph{calculateLDSNPandCNV} is used to calculate LD between CNVs and SNPs/INDELs. This function will read a VCF file into R and transform phased/unphased values (00, 01, 10, 11) into numeric values (0, 1, 2 or 0, 1). For a large VCF file (e.g., >= 1Mb), we generally use the option \emph{nChunkForVcf=50} to break the file into 50 chunks for reading into R.
+<<warning=FALSE, results="hide">>=
+##Obtain VCF-file information in CNVrd2 package
+vcfFile <- system.file(package="CNVrd2", "extdata",
+                       "chr1.161600000.161611000.vcf.gz")
+##Make a data frame named sampleCNV including samples, CNs, population names
+sampleCNV <- data.frame(copynumberGroups$allGroups[, c(1,2) ],rep("MXL", dim(copynumberGroups$allGroups)[1]))
+rownames(sampleCNV) <- substr(sampleCNV[, 1], 1, 7)
+sampleCNV[, 1] <- rownames(sampleCNV)
+##The first column must be the sample names and some samples should be in the vcf file
+tagSNPandINDELofMXL <- calculateLDSNPandCNV(sampleCNV = sampleCNV,
+                                            vcfFile = vcfFile, cnvColumn = 2,
+                                            population = "MXL", popColumn = 3,
+                                            nChunkForVcf = 5, chr = "1",
+                                            st = 161600001, en = 161611000,
+                                            codeSNP= "Three", codeCNV = "ThreeGroup")
+@
+
+<<warning=FALSE>>=
+head(tagSNPandINDELofMXL)
+@ 
+From the results of the LD analysis, \emph{rs117435514} is the best tagSNP for duplications: 0$\%$, 2.78$\%$ and 86.7$\%$ of deleted, normal and duplicated samples have this SNP (adjusted p-value = 7.1e-08, $r^2$ = 0.66).
+
+\section{Working with complex loci}
+\emph{CNVrd2} can also be used to measure multiallelic copy number polymorphisms. For loci having high CN, users should use the function \emph{segmentSamplesUsingPopInformation} to adjust the segmentation process across populations. An example of a gene exhibiting this type of complex CN polymorphism is \emph{CCL3L1}. Below we measure \emph{CCL3L1} CN and identify tag SNPs/INDELs for \emph{CCL3L1} CNVs. 
+
+The data set used here includes 1,917 samples from five large populations: European, East Asian, West African, South Asian, and Americas, with a total of 26 small populations as shown in Table \ref{tab1}.
+
+\begin{table}
+\small
+\begin{center}
+\begin{tabular}{|p{3cm}|p{2cm}|p{2cm}|}
+  \hline 
+ Population Group  & Cohort & Sample size \\
+  \hline
+Americas & ACB & 74\\
+Americas & ASW & 50\\
+Americas & CLM & 65\\
+Americas & MXL & 59\\
+Americas & PEL & 60\\
+Americas & PUR & 74\\
+East Asian & CDX & 88\\
+East Asian & CHB & 83\\
+East Asian & CHS & 104\\
+East Asian & JPT & 82\\
+East Asian & KHV & 78\\
+European & CEU & 96\\
+European & FIN & 78\\
+European & GBR & 77\\
+European & IBS & 77\\
+European & TSI & 100\\
+South Asian & BEB & 50\\
+South Asian & GIH & 81\\
+South Asian & ITU & 39\\
+South Asian & PJL & 37\\
+South Asian & STU & 49\\
+West African & ESN & 64\\
+West African & GWD & 105\\
+West African & LWK & 90\\
+West African & MSL & 68\\
+West African & YRI & 89\\
+\hline
+\end{tabular}
+\caption{1000 Genomes Project populations used in CCL3L1 copy number analysis.}
+\label{tab1}
+\end{center}
+\end{table}
+\large
+
+
+\subsection{Measuring CCL3L1 CN}
+The \emph{ccl3l1data} data includes 1,917 samples downloaded from the 1000 Genomes Project in October 2012 and March 2013, their corresponding populations, segmentation scores and CNs \footnote{Manuscript in preparation}. The segmentation scores were obtained by using the function \emph{segmentSamplesUsingPopInformation} for a 1Mb region (chr17:33670000-34670000) with 500bp-constant windows. 
+
+<<'ccl3l1Histogram', warning=FALSE, fig.cap = 'CCL3L1 segmentation score (all population groups).'>>=
+##Load data into R:
+data(ccl3l1data)
+head(ccl3l1data)
+hist(ccl3l1data$SS, 100, main='',xlab='Segmentation Score')
+@ 
+As can be seen in Figure \ref{fig:ccl3l1Histogram}, the data is multimodal and there are not clear clusters on the right. Therefore, we can use a single population which has clear clusters to obtain prior information for the clustering process into CN groups.  Here, we used the large European-ancestry population (cohorts CEU, TSI, IBS, GBR, FIN) to obtain prior information about the CN distribution.
+
+
+<<'EUccl3l1Histogram', warning=FALSE, fig.cap = 'European-ancestry segmentation score.'>>=
+xyEuro <- ccl3l1data[grep("CEU|TSI|IBS|GBR|FIN", ccl3l1data[, 2]), ]
+yEuro <- xyEuro[, 3]
+names(yEuro) <- rownames(xyEuro)
+hist(yEuro, 100, xlab = 'Segmentation Score', main = '')
+
+@ 
+
+As can be seen from Figure \ref{fig:EUccl3l1Histogram}, the European-ancestry data exhibit relatively clear clusters, allowing us to classify the samples into different CN groups.  
+
+\noindent
+{\bf Note:} if we use the option \emph{autoDetermineGroup = TRUE} in the function \emph{groupCNVs} then the Bayesian information criterion (BIC) will be used to choose a suitable number of components (See \citet{schwarz1978estimating}).
+
+
+<<'EUccl3l1results', warning=FALSE, fig.cap = 'Clustering results of European-ancestry sample sets.', results="hide">>=
+##Clustering European segmentation 
+##scores into group: 5 groups were chosen
+
+objectClusterEuroCCL3L1 <- new("clusteringCNVs", x = yEuro, k = 5)
+
+europeanCCL3L1Groups <- groupCNVs(Object = objectClusterEuroCCL3L1)
+
+@ 
+
+Next, we use these results to infer \emph{CCL3L1} CN in all populations.  The following code collects information about the means, standard deviations and proportions of the mixture components from the European population.  
+
+
+<<warning=FALSE, results="hide">>=
+#Means
+lambda0 <- as.numeric(europeanCCL3L1Groups$m)
+#SD
+sdEM <- as.numeric(europeanCCL3L1Groups$sigma)
+#Proportions
+pEM <- as.numeric(europeanCCL3L1Groups$p)
+@ 
+
+\noindent
+Take a look these results:
+
+<<warning=FALSE>>=
+lambda0
+sdEM
+pEM
+###Calculate the distances between groups
+for (ii in 2:5){print(lambda0[ii] - lambda0[ii-1])}
+
+###All segmentation scores
+ccl3l1X <- ccl3l1data$SS
+names(ccl3l1X) <- as.character(ccl3l1data$Name)
+range(ccl3l1X)
+
+@ 
+
+The information above is then used by the function \emph{groupBayesianCNVs} to cluster the segmentation scores for the combined set of all cohorts into different CN groups.  There is a high value in the full SS set (Figure \ref{fig:ccl3l1Histogram}), which we eliminate in the following steps by setting \emph{rightLimit=4} so that it is automatically allocated into the highest CN group. Using the other values, combined with locus-specific information from the literature, we set the number of groups to be 10. 
+
+<<>>=
+##Set prior information:
+#prior for the sd of the means of groups: 
+#5 was set for the third group = 2 CN
+sd <- c(1, 1, 5, 1, 1) 
+ccl3l1X <- sort(ccl3l1X)
+###Data
+xData <- ccl3l1X
+###Number of groups
+nGroups <- 10 
+###prior for means of groups
+lambda0 <- lambda0 
+###Prior for mixing proportions
+alpha0 <-  c(3, 29, 44, 18, 7,  5, rep(2, nGroups -length(pEM) -1))
+##Prior for the distances between groups
+distanceBetweenGroups = 0.485
+
+sdEM = sdEM
+
+@ 
+
+The final group has a large standard deviation as a result of the scattering of values on the right (Figure \ref{fig:EUccl3l1Histogram}), therefore, we can set this value to equal the standard deviation of the fourth group to avoid an overly wide mixture component.
+
+<<>>=
+##Adjust standard deviation for the fifth group
+sdEM[5] <- sdEM[4]
+ 
+@ 
+
+\noindent
+Run the \emph{groupBayesianCNVs} function to obtain CN groups.
+
+<<eval = FALSE, echo = TRUE>>=
+set.seed(123)
+groupCCL3L1allPops <- groupBayesianCNVs(xData = xData, nGroups = nGroups,
+                                        lambda0 = lambda0,
+                                        sd0 = sdEM, alpha0 = alpha0,
+                                        distanceBetweenGroups = distanceBetweenGroups,
+                                        sdOftau = sd,
+                                        rightLimit = 4)
+@ 
+
+\noindent
+With the random seed set to 123 (see above), the results obtained should be identical to those in the fourth column (CN) of the $ccl3l1data$ data object.
+
+
+\subsection{Identifying tag-SNPs for CCL3L1 CNVs}
+We can obtain obtain tag-SNPs/INDELs for multiple populations simultaneously. Below, we reuse the CCL3L1 data to obtain tag-SNPs for some populations.
+
+<<warning=FALSE, results="hide">>=
+rownames(ccl3l1data) <- ccl3l1data[, 1]
+
+@ 
+
+\noindent
+Load VCF file into R and choose populations which we would like to find tagSNPs/INDELs.
+
+<<warning=FALSE, results="hide">>=
+##Obtain vcf-file information in CNVrd2
+vcfFileCCL3L1 <- system.file(package="CNVrd2", "extdata",
+                       "chr17.34800000.34830000.vcf.gz")
+##Set populations we would like to identify tagSNPs
+allPops <- c("TSI", "CEU", "GBR", "FIN", "IBS")
+@
+<<warning = FALSE, results="hide">>=
+##Identify tag SNPs/INDELs
+tagSNPandINDELofCCL3L1 <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
+                                            vcfFile = vcfFileCCL3L1, cnvColumn = 4,
+                                            population = allPops, popColumn = 2,
+                                            nChunkForVcf = 5, chr = "17",
+                                            st = 34800000, en = 34830000 )
+
+@ 
+Take a quick look some significant results (multiple populations: the return value of \emph{calculateLDSNPandCNV} is a list of populations).
+\small
+<<warnings=FALSE, size='tiny'>>=
+lapply(tagSNPandINDELofCCL3L1, head)
+@ 
+
+Th eoutput above provides evidence that 
+\emph{rs113877493} may be a tagSNP for \emph{CCL3L1} deletions in the FIN (p = 1.1e-07, $r^2$ = 0.44) and GBR (p = 2.6e-04, $r^2$ = 0.27) populations.
+
+\section{Indentifying poplymorphic regions}
+CNVrd2 can also be used to identity CN polymorphic regions and the putative boundaries of these regions.  We reuse the data from the FCGR3 locus to investigate the polymorphic region around the two genes.
+
+<<warnings=FALSE>>=
+fcgr3PolymorphicRegion <- identifyPolymorphicRegion(Object = objectCNVrd2,
+                                                    segmentObject = resultSegment, 
+                                                    thresholdForPolymorphicRegions = c(0.75, 0.25),
+                                                    plotLegend = FALSE)
+
+@ 
+
+To plot a small region around the gene, we use the funtion \emph{plotPolymorphicRegion}.
+
+
+<<'FCGR3polymorphc1', warning=FALSE, fig.cap = 'CN polymorphic region at FCGR3 locus, represented by quantiles of the distribution of segmentation scores across samples.'>>=
+par(mfrow = c(2, 1))
+plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegionObject = fcgr3PolymorphicRegion,
+                      xlim = c(161300000, 161800000), drawThresholds = TRUE,
+                      thresholdForPolymorphicRegions = c(0.75, 0.25))
+
+plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegionObject = fcgr3PolymorphicRegion,
+                      xlim = c(161300000, 161800000), drawThresholds = TRUE,
+                      thresholdForPolymorphicRegions = c(0.9, 0.1))
+
+@ 
+
+The boundaries of polymorphic regions rely on the two parameters \emph{quantileValue} and \emph{thresholdForPolymorphicRegions}. We can set high \emph{thresholdForPolymorphicRegions} values to obtain only high-polymorphic regions (e.g., \emph{CCL3L1}), but it can omit some medium-polymorphic regions (e.g., \emph{FCGR3A/3B}). Figure \ref{fig:FCGR3polymorphc1} depicts two different thresholds resulting in different polymorphic regions.
+
+
+In the function \emph{identifyPolymorphicRegion}, if we would like to obtain only polymorphic regions which differentiate between populations (e.g., to detect evidence of selection) then we can use the option \emph{VstTest=TRUE}. This option will calculate the Vst statistics \citep{redon2006global}. Users have to supply a vector which includes population information in \emph{popName}. The returned putative boundaries will be the intersection of polymorphic regions and regions having maxVst $>=$ \emph{thresholdVST}. 
+
+\section{Note}
+If we use the option \emph{entireGene = FALSE} in the step \emph{segmentation} then the pipeline will not refine the segmentation results (the results will be the same as the pipeline used in \cite{nguyen2013cnvrd}).
+
+
+\section{Session information}
+<<>>=
+sessionInfo()
+@ 
+
+\bibliographystyle{jss}
+\bibliography{refCNVrd2}
+
+\end{document}
