@@ -16,7 +16,8 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
                                       geneColor = 'lightpink',
                                       cex = 1.5, lwd = 1.5,
                                       verticalAdjustment = 0.3,
-                                      plotLegend = TRUE){
+                                      plotLegend = TRUE,
+                   plotPolymorphicRegion = TRUE){
     
 ##Checking parameters
   st = Object@st
@@ -86,35 +87,6 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   minQuantile <- min(apply(mQuantile, 1, min))
   maxQuantile <- max(apply(mQuantile, 1, max))
 
-  #########Plot the region#############################
-  if (VstTest)
-      par(mfrow = c(2, 1))
-  plot(subRegionData[, 1], mQuantile[1, ], col = 'white',
-       xlab = paste(chr, ":", outputST, "-", outputEND, sep = ""),
-       ylab = "Segmentation score",
-       xlim = c(outputST, outputEND),
-       ylim = c(minQuantile - verticalAdjustment, maxQuantile + verticalAdjustment))
-
-  ##############Plot genes
-   for(k in 1:ncol(genes)){
-       rect(genes[1, k], minQuantile - verticalAdjustment - 0.3,
-            genes[2, k], maxQuantile + verticalAdjustment + 0.3,
-            col= geneColor)
-       
-            if (is.null(geneNames))
-                text(genes[2, k],
-                     maxQuantile + verticalAdjustment,
-                     paste("Gene", k, sep = ""), 
-                     cex = cex, lwd = lwd)
-            else
-              text(genes[2, k],
-                   maxQuantile + verticalAdjustment,
-                   geneNames[k], 
-                   cex = 0.4*cex, lwd = 0.4*lwd
-                   )
-            }
-
-
 
   ###Make a list to store quantile values
   listQ <- list()
@@ -122,24 +94,12 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
       mQ <- data.frame(subRegionData, mQuantile[ii, ])
       listQ[[ii]] <- mQ
       mQ <- mQ[(mQ[, 1] >= outputST) & (mQ[, 2] <=outputEND ), ]
-
-      apply(mQ, 1, function(x)
-            lines(c(x[1], x[2]), c(x[3], x[3]), col = quantileColor[ii],
-                  lwd = lwd, cex = cex))
   }
 
   thresholdsTogetPolymorphicRegions <- c(quantile(listQ[[1]][, 3],
                                             thresholdForPolymorphicRegions[1]),
                                          quantile(listQ[[nQuantile]][, 3],
                                               thresholdForPolymorphicRegions[2]))
-
-  if (drawThresholds)
-      abline(h = thresholdsTogetPolymorphicRegions, col = 'green')
-  
-
-  if (plotLegend)
-      legend("topright", paste("Quantile: ", quantileValue, sep = ""), lty = 1,
-         col = quantileColor)
 
   
   ######################Identity polymorphic regions##################
@@ -160,7 +120,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   valueVST <- NULL
   if (VstTest){
       cat("Calculate Vst\n")
-      popAll <- popName
+      popAll <- as.character(popName)
 
       popNames <- names(table(popAll))
       nPops <- length(popNames)
@@ -195,8 +155,10 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
           })
 
       ########################
-
-      maxVST <- apply(valueVST, 2, function(x) max(x))
+      maxVST <- valueVST
+      if (is.matrix(maxVST))
+	      maxVST <- apply(valueVST, 2, function(x) max(x))
+      	
       if (is.null(thresholdVST))
           thresholdVST <- quantile(maxVST, 0.95)
       regionVST <- data.frame(subRegionData, maxVST)
@@ -205,35 +167,6 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
       
       shortregionVST <- reduce(IRanges(shortregionVST[, 1], shortregionVST[, 2]))
       #########Plot######################################
-      plot(c(st, en), range(maxVST), col = 'white',
-           xlab = paste(chr, ":", outputST, "-", outputEND, sep = ""),
-           ylab = "max Vst",
-           xlim = c(outputST, outputEND),
-           ylim = range(maxVST))
-        ##############Plot genes
-      for(k in 1:ncol(genes)){
-       rect(genes[1, k], minQuantile - verticalAdjustment - 0.3,
-            genes[2, k], maxQuantile + verticalAdjustment + 0.3,
-            col= geneColor)
-       
-            if (is.null(geneNames))
-                text(genes[2, k],
-                     maxQuantile + verticalAdjustment,
-                     paste("Gene", k, sep = ""), 
-                     cex = cex, lwd = lwd)
-            else
-              text(genes[2, k],
-                   maxQuantile + verticalAdjustment,
-                   geneNames[k], 
-                   cex = 0.4*cex, lwd = 0.4*lwd
-                   )
-            }
-
-
-      ##########max Vst##################
-      apply(regionVST, 1, function(x)
-            lines(x[1:2], rep(x[3], 2), lwd = lwd, cex = cex))
-      abline(h  = thresholdVST, col = 'green')
 
       ###############################################################################
       ##############################################################################
@@ -260,6 +193,64 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   SSofunionBoundary[, 2] <- SSofunionBoundary[, 2] -1
   end(unionBoundary) <- end(unionBoundary) - 1
   #########################################################################
+  if (plotPolymorphicRegion){
+      if (VstTest)
+          par(mfrow = c(2, 1))
+
+      polymorphicRegionObject <- list(putativeBoundary = unionBoundary, SSofPolymorphicRegions = SSofunionBoundary,
+                                      subRegionMatrix = subRegionMatrix,
+                                      subRegion = subRegionData,
+                                      mQuantile = mQuantile,
+                                      Vst = valueVST)
+      plotPolymorphicRegion(Object = objectCNVrd2,
+                            polymorphicRegionObject = polymorphicRegionObject,
+                            xlim = c(outputST, outputEND),
+                            drawThresholds = drawThresholds,
+                            thresholdForPolymorphicRegions = thresholdForPolymorphicRegions ,
+                            quantileValue = quantileValue,
+                            quantileColor = quantileColor,
+                            geneColor = geneColor,
+                            cex = cex, lwd = lwd,
+                            verticalAdjustment = verticalAdjustment,
+                            plotLegend = plotLegend)
+
+      ###Plot Vst#############################################
+      if (VstTest) {
+          plot(c(st, en), range(maxVST), col = 'white',
+               xlab = paste(chr, ":", outputST, "-", outputEND, sep = ""),
+               ylab = "max Vst",
+               xlim = c(outputST, outputEND),
+               ylim = range(maxVST))
+        ##############Plot genes
+          for(k in 1:ncol(genes)){
+              rect(genes[1, k], minQuantile - verticalAdjustment - 0.3,
+                   genes[2, k], maxQuantile + verticalAdjustment + 0.3,
+                   col= geneColor)
+       
+            if (is.null(geneNames))
+                text(genes[2, k],
+                     maxQuantile + verticalAdjustment,
+                     paste("Gene", k, sep = ""), 
+                     cex = cex, lwd = lwd)
+            else
+              text(genes[2, k],
+                   maxQuantile + verticalAdjustment,
+                   geneNames[k], 
+                   cex = 0.4*cex, lwd = 0.4*lwd
+                   )
+            }
+
+
+      ##########max Vst##################
+      apply(regionVST, 1, function(x)
+            lines(x[1:2], rep(x[3], 2), lwd = lwd, cex = cex))
+      abline(h  = thresholdVST, col = 'green')
+
+      }
+      ##############################################################
+  }
+      
+
   #########################################################################
 
   return(list(putativeBoundary = unionBoundary, SSofPolymorphicRegions = SSofunionBoundary,
