@@ -13,9 +13,9 @@ Install the package
 
 > R CMD INSTALL CNVrd2_1.0.0.tar.gz
 
-Please see the file **CNVrd2.pdf**
+Please see the file [**CNVrd2.pdf**](https://github.com/hoangtn/CNVrd2/blob/master/CNVrd2.pdf)
 
 #### Notes: using the 1000 Genomes data
 
-Please see the file **using1000Genome.md** 
+Please see the file [**using1000Genome.md**](https://github.com/hoangtn/CNVrd2/blob/master/using1000Genome.md) 
 
