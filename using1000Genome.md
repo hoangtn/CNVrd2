@@ -38,7 +38,7 @@ samtools view -hb $line 1:161100000-162100000 > $tempName
 done < listMXL.txt 
 ```
 
-After downloading, we can use **samtools** to keep only reads mapped (a good website to understand SAM/BAM flags is http://picard.sourceforge.net/explain-flags.html):
+After downloading, we can use **samtools** to keep only reads mapped:
 
 ```{}
 for file in $(ls *bam)
@@ -53,13 +53,16 @@ sammtols view -F 4 $file -b > temp.bam
 mv temp.bam $file
 done
 ```
+
+A good website to understand SAM/BAM flags is http://picard.sourceforge.net/explain-flags.html
+
 ## VCF files
 
 We can use **samtools** to obtain a vcf file (<a href="">Danecek et al. 2011</a> ) http://vcftools.sourceforge.net/ for all MXL samples above ***or*** we can use the SNP data of the 1000 Genomes Project.
 
 Here, we use the data from the 1000 Genomes Project.
 
-All VCF files can be obtained from this page [http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/]
+All VCF files can be obtained from this page http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/
 
 We choose a region, for example chr1:161400000-161700000 flanking the FCGR3 gene to identify tagSNPs.
 
