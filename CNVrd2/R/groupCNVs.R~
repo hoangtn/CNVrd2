@@ -27,7 +27,7 @@ setMethod("groupCNVs", "clusteringCNVs",
 	    if (autoDetermineGroup){
                 k <- searchGroupCNVs(Object = Object, nGroupMin = nGroupMin, nGroupMax = nGroupMax)$nComponents
                 Object@k <- k
-		message(k, " was chosen")
+		cat(k, " was chosen\n")
 
             }
       

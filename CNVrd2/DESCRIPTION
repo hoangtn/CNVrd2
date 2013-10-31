@@ -19,5 +19,5 @@ Collate: AllClasses.R AllGenerics.R countReadInWindow.R
         segmentSamples.R segmentSamplesUsingPopInformation.R identifyPolymorphicRegion.R 
         plotPolymorphicRegion.R emnormalCNV.R groupCNVs.R searchGroupCNVs.R
         groupBayesianCNVs.R plotCNVrd2.R calculateLDSNPandCNV.R
-URL:
+URL: https://github.com/hoangtn/CNVrd2
 Packaged: 2013-09-01 07:02:44 UTC; root

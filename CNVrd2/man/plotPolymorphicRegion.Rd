@@ -39,4 +39,32 @@ to obtain polymorphic regions.
 \seealso{
  \code{\link{identifyPolymorphicRegion}}
 }
+
+\examples{
+\dontrun{
+
+plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegionObject = fcgr3PolymorphicRegion,
+                      xlim = c(161300000, 161800000), drawThresholds = TRUE,
+                      thresholdForPolymorphicRegions = c(0.75, 0.25))
+
+
+
+##Change thresholds
+plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegionObject = fcgr3PolymorphicRegion,
+                      xlim = c(161300000, 161800000), drawThresholds = TRUE,
+                      thresholdForPolymorphicRegions = c(0.9, 0.1))
+
+
+##Plot standard deviation
+
+plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegionObject = fcgr3PolymorphicRegion,
+                      xlim = c(161300000, 161800000), typePlot = "SD",
+                      thresholdForPolymorphicRegions = c(0.75, 0.25))
+
+
+
+
+
+}
+}
 \keyword{plot}

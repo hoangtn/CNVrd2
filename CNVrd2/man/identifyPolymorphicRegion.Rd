@@ -39,10 +39,26 @@ Hoang Tan Nguyen, Tony R Merriman and MA Black. \email{hoangtannguyenvn@gmail.co
 }
 \note{
 Users can choose various quantile values and adjust different thresholds
-to obtain polymorphic regions.
+to obtain polymorphic regions. 
+
+To visualize more clearly polymorphic regions user can use the method \link{plotPolymorphicRegion} with
+the option \emph{typePlot="SD"}.
+
 }
 
 \seealso{
 \code{\link{plotPolymorphicRegion}}
+}
+
+\examples{
+\dontrun{
+
+fcgr3PolymorphicRegion <- identifyPolymorphicRegion(Object = objectCNVrd2,
+                                                    segmentObject = resultSegment, 
+                                                    thresholdForPolymorphicRegions = c(0.75, 0.25),
+                                                    plotLegend = FALSE)
+
+
+}
 }
 \keyword{methods}

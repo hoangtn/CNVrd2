@@ -120,7 +120,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   ##########Calculate Vst #################################################
   valueVST <- NULL
   if (VstTest){
-      cat("Calculate Vst\n")
+      message("Calculate Vst")
       popAll <- as.character(popName)
 
       popNames <- names(table(popAll))
@@ -177,7 +177,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   }
   unionBoundary <- unionBoundary[width(unionBoundary) > 1]
   #########Obtain segmentation scores of putative regions#####################################
-  cat("Calculate segmentation scores for polymorphic regions\n")
+  message("Calculate segmentation scores for polymorphic regions")
   SSofunionBoundary <- as.data.frame(unionBoundary)[, c(1, 2)]
   SSofunionBoundary <- data.frame(SSofunionBoundary, matrix(0, nrow = dim(SSofunionBoundary)[1],
                                                           ncol = dim(subRegionMatrix)[1]))

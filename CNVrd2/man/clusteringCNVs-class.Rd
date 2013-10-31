@@ -52,7 +52,7 @@ Objects can be created by calls of the form \code{new("clusteringCNVs", ...)}.
 }
 
 \author{
-  Hoang Tan Nguyen, Tony R Merriman and MA Black. \email{hoangtannguyen@gmail.com}
+  Hoang Tan Nguyen, Tony R Merriman and MA Black. \email{hoangtannguyenvn@gmail.com}
 
 }
 \examples{

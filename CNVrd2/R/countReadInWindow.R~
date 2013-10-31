@@ -58,7 +58,7 @@ setMethod("countReadInWindow", "CNVrd2",
                     tempRow <- rep(0, numberofWindows)
                     names(tempRow) <- as.integer(c(1:numberofWindows))
                     tempRow[names(tempRow) %in% names(aa)] <- aa
-                    message("Reading file: ", bamFile[x])
+                    cat("Reading file: ", bamFile[x], "\n")
                     return(tempRow)
                     }
               ####Read all Bam files#########################################

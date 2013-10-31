@@ -195,8 +195,6 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   end(unionBoundary) <- end(unionBoundary) - 1
   #########################################################################
   if (plotPolymorphicRegion){
-      if (VstTest)
-          par(mfrow = c(2, 1))
 
       polymorphicRegionObject <- list(putativeBoundary = unionBoundary, SSofPolymorphicRegions = SSofunionBoundary,
                                       subRegionMatrix = subRegionMatrix,
@@ -216,41 +214,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
                             verticalAdjustment = verticalAdjustment,
                             plotLegend = plotLegend)
 
-      ###Plot Vst#############################################
-      if (VstTest) {
-          plot(c(st, en), range(maxVST), col = 'white',
-               xlab = paste(chr, ":", outputST, "-", outputEND, sep = ""),
-               ylab = "max Vst",
-               xlim = c(outputST, outputEND),
-               ylim = range(maxVST))
-        ##############Plot genes
-          for(k in 1:ncol(genes)){
-              rect(genes[1, k], minQuantile - verticalAdjustment - 0.3,
-                   genes[2, k], maxQuantile + verticalAdjustment + 0.3,
-                   col= geneColor)
-       
-            if (is.null(geneNames))
-                text(genes[2, k],
-                     maxQuantile + verticalAdjustment,
-                     paste("Gene", k, sep = ""), 
-                     cex = cex, lwd = lwd)
-            else
-              text(genes[2, k],
-                   maxQuantile + verticalAdjustment,
-                   geneNames[k], 
-                   cex = 0.4*cex, lwd = 0.4*lwd
-                   )
-            }
-
-
-      ##########max Vst##################
-      apply(regionVST, 1, function(x)
-            lines(x[1:2], rep(x[3], 2), lwd = lwd, cex = cex))
-      abline(h  = thresholdVST, col = 'green')
-
       }
-      ##############################################################
-  }
       
 
   #########################################################################

@@ -2,10 +2,10 @@
 \alias{groupCNVs}
 
 \title{
-Group segmentation scores into groups.
+Cluster segmentation scores into groups.
 }
 \description{
-  Use the EM algorithm (Dempster et al., 1977) to group segmentation
+  Use the EM algorithm (Dempster et al., 1977) to cluster segmentation
   scores into various groups.
 
 }

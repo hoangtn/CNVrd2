@@ -58,7 +58,7 @@ A number indicating an ending coordinate to read the vcf file.
 
 }
 \item{nChunkForVcf}{
-A number indicating how many chunks users would like to divide the vcf file to read into R. It depends on user computers. We usually 10 to 50 for this argument. 
+A number indicating how many chunks users would like to divide the vcf file to read into R. It depends on users' computers. We usually use 10 to 50 for this argument. 
 }
 \item{codeSNP}{
 
@@ -72,7 +72,7 @@ A character string partial matching to one of: \emph{\dQuote{All}} will test cop
 }
   \item{typeTest}{
 A character string partial matching to one of: \dQuote{All} will test all copy-number status, \dQuote{Dup/Del} will test for
-only duplicated/deleted versus normal groups.
+only duplicated/deleted versus normal.
 }
 \item{parallel}{
 A logical value indicating whether multicores are used or NOT (default: FALSE).

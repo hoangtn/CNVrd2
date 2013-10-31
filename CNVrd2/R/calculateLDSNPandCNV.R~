@@ -126,13 +126,18 @@ calculateLDSNPandCNV <- function(sampleCNV = NULL,
       pv[, c(1, 3)] <- format(signif(pv[, c(1, 3)], 2), scientific = TRUE)
 
       snpMatrixPopT <- snpMatrixPopT[pmatch(rownames(pv), rownames(snpMatrixPopT)), ]
+      snpMatrixPopT <- snpMatrixPopT[rowSums(snpMatrixPopT) > 0 , ]
 
       cnvTable <- apply(snpMatrixPopT, 1, function(x){
         bTemp <- table(x, cnv.number)
-        if (length(grep("1", rownames(bTemp))) >= 1)
-          cnvFrequency <- bTemp["1", ]/colSums(bTemp)
+        cnvFrequency <- bTemp[rownames(bTemp) != "0", ]/colSums(bTemp)
+        if (is.matrix(cnvFrequency))
+            cnvFrequency <- colSums(cnvFrequency)
+        
         return(cnvFrequency)
         })
+
+      
       cnvTable <- apply(cnvTable, 1, function(x) round(100*x, 2))
       pv <- cbind(cnvTable[pmatch(rownames(pv), rownames(cnvTable)),], pv, rep(kk, dim(pv)[1]))
       colnames(pv) <- c(paste(names(table(cnv.number)), "CN_(n=", table(cnv.number), ")", sep = ""),
@@ -142,7 +147,7 @@ calculateLDSNPandCNV <- function(sampleCNV = NULL,
     if (length(population) == 1)
       PandR2list <- calcPandR2(population)
     else
-      PandR2list <- sapply(population, calcPandR2)
+      PandR2list <- lapply(population, calcPandR2)
 
     return(r2Andpvalues = PandR2list)
     }

@@ -187,10 +187,6 @@ setMethod("emnormalCNV", "clusteringCNVs",
               message("p: ", p)
               message("sigma: ", sigma)
               message("====================================")
-
-            if (count >= nMax)
-                warning(count -1, "iterations are maximum")
-
             
 
             return(list(loglk = llk1, p = p, m = m,
