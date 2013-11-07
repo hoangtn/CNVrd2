@@ -64,7 +64,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
                           ncol = dim(subRegionData[1]))
 
   for (ii in 1:length(sampleid)){
-      subCNA <- cna.out[grep(sampleid[ii], cna.out[, 1]), c(3, 4, 6)]
+      subCNA <- cna.out[grep(paste("^", sampleid[ii], "$", sep = ""), cna.out[, 1]), c(3, 4, 6)]
 
     for (jj in 1:dim(subRegionData)[1]){
         subRegionMatrix[ii, jj] <-  subCNA[(subCNA[, 1] <= subRegionData[jj, 1]) &(subCNA[, 2] >= subRegionData[jj, 2]), 3]
@@ -114,7 +114,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   lowBoundary <- reduce(IRanges(lowBoundary[, 1], lowBoundary[, 2]))
   highBoundary <- reduce(IRanges(highBoundary[, 1], highBoundary[, 2]))
 
-  unionBoundary <- reduce(union(lowBoundary, lowBoundary))
+  unionBoundary <- reduce(union(lowBoundary, highBoundary))
 
 
   ##########Calculate Vst #################################################

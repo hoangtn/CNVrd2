@@ -64,7 +64,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
                           ncol = dim(subRegionData[1]))
 
   for (ii in 1:length(sampleid)){
-      subCNA <- cna.out[grep(sampleid[ii], cna.out[, 1]), c(3, 4, 6)]
+      subCNA <- cna.out[grep(paste("^", sampleid[ii], "$", sep = ""), cna.out[, 1]), c(3, 4, 6)]
 
     for (jj in 1:dim(subRegionData)[1]){
         subRegionMatrix[ii, jj] <-  subCNA[(subCNA[, 1] <= subRegionData[jj, 1]) &(subCNA[, 2] >= subRegionData[jj, 2]), 3]
@@ -120,7 +120,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   ##########Calculate Vst #################################################
   valueVST <- NULL
   if (VstTest){
-      cat("Calculate Vst\n")
+      message("Calculate Vst")
       popAll <- as.character(popName)
 
       popNames <- names(table(popAll))
@@ -177,7 +177,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   }
   unionBoundary <- unionBoundary[width(unionBoundary) > 1]
   #########Obtain segmentation scores of putative regions#####################################
-  cat("Calculate segmentation scores for polymorphic regions\n")
+  message("Calculate segmentation scores for polymorphic regions")
   SSofunionBoundary <- as.data.frame(unionBoundary)[, c(1, 2)]
   SSofunionBoundary <- data.frame(SSofunionBoundary, matrix(0, nrow = dim(SSofunionBoundary)[1],
                                                           ncol = dim(subRegionMatrix)[1]))
