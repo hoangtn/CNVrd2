@@ -83,10 +83,10 @@ setMethod("emnormalCNV", "clusteringCNVs",
                     p.init <- 1
                     }
                 if (verbose){
-                  cat("===================================\n")
-                  cat("==========Initial values============\n")
-                  cat("p: ", p.init, "\nm: ", mu.init, "\nsigma: ", sigma.init, "\n")
-                  cat("===================================\n\n")
+                  message("===================================")
+                  message("==========Initial values============")
+                  message("p: ", p.init, "\nm: ", mu.init, "\nsigma: ", sigma.init)
+                  message("===================================\n")
                 }
                 list(p.init = p.init,
                      mu.init = mu.init,
@@ -123,7 +123,7 @@ setMethod("emnormalCNV", "clusteringCNVs",
                     llk0 <- loglk(x, p, m, sigma)
                     m0 <- m
                     if (verbose){
-                        cat("Loop: ", count, "\n  p:     ", p, "\n  m:     ", m, "\n  sigma: ", sigma, "\n" )
+                        message("Loop: ", count, "\n  p:     ", p, "\n  m:     ", m, "\n  sigma: ", sigma)
                         }
 ###########################################################################
 ##########################################################################
@@ -180,13 +180,17 @@ setMethod("emnormalCNV", "clusteringCNVs",
                 bic <- 2*llk1 - (2*k)*log(ndata)
                 ev <- "Equal variances"
                 }
-              cat("=====================================\n")
-              cat(count - 1, " iterations\n")
-              cat(k, " components with ", ev, "\n")
-              cat("m: ", m, "\n")
-              cat("p: ", p, "\n")
-              cat("sigma: ", sigma, "\n")
-              cat("====================================\n")
+              message("=====================================")
+              message(count - 1, " iterations")
+              message(k, " components with ", ev)
+              message("m: ", m)
+              message("p: ", p)
+              message("sigma: ", sigma)
+              message("====================================")
+
+            if (count >= nMax)
+                warning(count -1, "iterations are maximum")
+
             
 
             return(list(loglk = llk1, p = p, m = m,

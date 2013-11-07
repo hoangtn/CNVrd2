@@ -36,16 +36,18 @@ Hoang Tan Nguyen, Tony R Merriman and MA Black. \email{hoangtannguyenvn@gmail.co
 }
 
 \examples{
+\dontrun{
 data(fcgr3bMXL)
-#bamFiles <- dir("Bam", pattern = ".bam$")
+bamFiles <- dir("Bam", pattern = ".bam$")
 objectCNVrd2 <- new("CNVrd2", windows = 1000, chr = "chr1",
                    st = 161100001, en = 162100000,
                    dirBamFile = "Bam",
                    genes = c(161592986, 161601753),
                    geneNames = "3B")
 
-##readCountMatrix <- countReadInWindow(Object = objectCNVrd2, correctGC = TRUE)
-##readCountMatrix[1:3, 1:3]
+readCountMatrix <- countReadInWindow(Object = objectCNVrd2, correctGC = TRUE)
+readCountMatrix[1:3, 1:3]
+}
 }
 \keyword{methods}
 

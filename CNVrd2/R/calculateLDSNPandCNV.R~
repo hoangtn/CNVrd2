@@ -48,11 +48,11 @@ calculateLDSNPandCNV <- function(sampleCNV = NULL,
             rangeVCF <- GRanges(seqnames = chr, ranges = IRanges(
                                                 start = x[1],
                                                 end = x[2]))
-            message("VCF file: ", x[1], " to ", x[2])
+            cat("VCF file: ", x[1], " to ", x[2], "\n")
             chunkVCF <- readVcf(tabixFile, hg, rangeVCF)
             return(geno(chunkVCF)$GT)
             }
-        message("Reading the VCF file ",chr, ":", st, "-", en, " with ", nChunkForVcf, " blocks each")
+        cat("Reading the VCF file ",chr, ":", st, "-", en, " with ", nChunkForVcf, " blocks each\n")
         if (parallel == FALSE)
             snp.matrix <- do.call(rbind, lapply(xMatrix, readChunkVCF))
         else
@@ -75,7 +75,7 @@ calculateLDSNPandCNV <- function(sampleCNV = NULL,
         }
       if (dim(samples)[1] < 1)
         stop(paste("No samples of the population ", kk, "\n Please check the column cnvColumn", sep = ""))
-      message("Calculating p and r2 values for ", kk, " population.")
+      cat("Calculating p and r2 values for ", kk, " population.\n")
       samples <- samples[order(samples[, cnvColumn]), ]
       colMatch <- pmatch(samples[, 1], colnames(snp.matrix))
       colMatch <- colMatch[!is.na(colMatch)]

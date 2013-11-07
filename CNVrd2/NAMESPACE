@@ -1,4 +1,3 @@
-exportPattern("^[[:alpha:]]+")
 exportMethods(
     "countReadInWindow",
     "emnormalCNV",
@@ -6,7 +5,9 @@ exportMethods(
     "plotCNVrd2",
     "searchGroupCNVs",
     "segmentSamples",
-    "segmentSamplesUsingPopInformation" 
+    "segmentSamplesUsingPopInformation",
+    "identifyPolymorphicRegion",
+    "plotPolymorphicRegion"
 )
 exportClasses(
     "clusteringCNVs",

@@ -73,7 +73,7 @@ groupBayesianCNVs(xData, nGroups, lambda0, sd0, alpha0, distanceBetweenGroups, i
 
 }
 \item{heidel.diag}{
-If heidel.diag == TRUE then Heidelberger and Welch's convergence diagnostic is used.
+If heidel.diag = TRUE then Heidelberger and Welch's convergence diagnostic is used.
 }
 \item{leftLimit}{
 Values which are less than this value will be allocated to the smallest group.
@@ -121,7 +121,71 @@ Hoang Tan Nguyen, Tony R Merriman and MA Black. \email{hoangtannguyenvn@gmail.co
 
 }
 \examples{
-###
+\dontrun{
+data(ccl3l1data)
+
+xyEuro <- ccl3l1data[grep("CEU|TSI|IBS|GBR|FIN", ccl3l1data[, 2]), ]
+
+names(yEuro) <- rownames(xyEuro)
+
+##Clustering European segmentation scores into group: 5 groups were chosen
+
+objectClusterEuroCCL3L1 <- new("clusteringCNVs", x = yEuro, k = 5)
+
+europeanCCL3L1Groups <- groupCNVs(Object = objectClusterEuroCCL3L1)
+
+##Obtain prior information
+#Means
+lambda0 <- as.numeric(europeanCCL3L1Groups$m)
+#SD
+sdEM <- as.numeric(europeanCCL3L1Groups$sigma)
+#Proportions
+pEM <- as.numeric(europeanCCL3L1Groups$p)
+
+
+###Calculate the distances between groups
+for (ii in 2:5){print(lambda0[ii] - lambda0[ii-1])}
+
+###All segmentation scores
+ccl3l1X <- ccl3l1data$SS
+names(ccl3l1X) <- as.character(ccl3l1data$Name)
+range(ccl3l1X)
+
+
+ 
+##Set prior information: 
+#prior for the sd of the means of groups: 
+#5 was set for the third group = 2 CN
+sd <- c(1, 1, 5, 1, 1) 
+ccl3l1X <- sort(ccl3l1X)
+###Data
+xData <- ccl3l1X
+###Number of groups
+nGroups <- 10 
+###prior for means of groups
+lambda0 <- lambda0 
+###Prior for mixing proportions
+alpha0 <-  c(3, 29, 44, 18, 7,  5, rep(2, nGroups -length(pEM) -1))
+##Prior for the distances between groups
+distanceBetweenGroups = 0.485
+
+sdEM = sdEM
+
+
+##Adjust standard deviation for the fifth group
+sdEM[5] <- sdEM[4]
+ 
+ set.seed(123)
+ groupCCL3L1allPops <- groupBayesianCNVs(xData = xData, nGroups = nGroups,
+                                         lambda0 = lambda0,
+                                         sd0 = sdEM, alpha0 = alpha0,
+                                         distanceBetweenGroups = distanceBetweenGroups,
+                                         sdOftau = sd,
+                                        rightLimit = 4)
+
+
+
+}
 }
 \keyword{methods}
 

@@ -21,11 +21,11 @@ setMethod("plotCNVrd2", "CNVrd2",
 else {
   outputST = st
   outputEND = en}
-
+  
   if (is.null(xlab))
-      xlab <- "Coordinate"
+      xlab= 'Coordinate'
   if (is.null(ylab))
-      ylab <- "Standardized read count"
+      ylab= 'Standardized read count'
 
 
 

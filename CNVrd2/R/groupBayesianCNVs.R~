@@ -134,12 +134,12 @@ groupBayesianCNVs <- function(xData, nGroups,
 		hTest <- heidel.diag(xem)
 		if (any(is.na(hTest[[1]][, 5])))
 
-		warning("Not convergent\n", hTest)
+		cat("Not convergent\n", hTest, "\n")
 
 		        if (any(is.na(hTest[[1]][, 5]))){
-            message("===============================")
-            message("==========Not convergent=======")
-            message("===============================")
+            cat("===============================\n")
+            cat("==========Not convergent=======\n")
+            cat("===============================\n")
 	}}
 
 

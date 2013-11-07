@@ -114,7 +114,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   lowBoundary <- reduce(IRanges(lowBoundary[, 1], lowBoundary[, 2]))
   highBoundary <- reduce(IRanges(highBoundary[, 1], highBoundary[, 2]))
 
-  unionBoundary <- reduce(union(lowBoundary, highBoundary))
+  unionBoundary <- reduce(union(lowBoundary, lowBoundary))
 
 
   ##########Calculate Vst #################################################

@@ -3,7 +3,7 @@ setGeneric("plotPolymorphicRegion",
 
 setMethod("plotPolymorphicRegion", "CNVrd2",
           function(Object, polymorphicRegionObject = NULL,
-                                      xlim = NULL, typePlot = c("Quantile", "SD", "Vst"),
+                                      xlim = NULL,
                    xlab = NULL, ylabQuantile = NULL,
                    ylabSD = NULL,
                                       quantileValue = c(0.1, 0.5, 0.9),
@@ -36,17 +36,10 @@ setMethod("plotPolymorphicRegion", "CNVrd2",
    windows = Object@windows
   chr = Object@chr
   genes <- Object@genes
-  geneNames <- Object@geneNames
-  
-  genes <- matrix(genes, nrow = 2)
-
-  
   geneNames = Object@geneNames
   quantileValue <- sort(quantileValue)
 
     nQuantile <- length(quantileValue)
-
-  typePlot <- match.arg(typePlot)
 
 
   if (is.null(ylabQuantile))
@@ -108,67 +101,42 @@ setMethod("plotPolymorphicRegion", "CNVrd2",
                                                        y = mQ[, 3],
                                                        colour = as.character(rownames(mQuantile)[ii])))
   }
-
+  
+      
   #########Plot the region#############################
   thresholdsTogetPolymorphicRegions <- c(quantile(listQ[[1]][, 3],
                                             thresholdForPolymorphicRegions[1]),
                                          quantile(listQ[[nQuantile]][, 3],
                                               thresholdForPolymorphicRegions[2]))
-  if (typePlot == "Quantile"){
-      p1 <- ggplot() + geom_line(data= dfQuantile, aes(x=x1, y=x2, group = Quantile, colour=Quantile), size=cex) +
-          coord_cartesian(xlim = c(outputST, outputEND)) + theme(legend.position="top") + xlab(xlab) + ylab(ylabQuantile)
-##############Plot genes
-      if (!is.null(genes)){
-          genesDataFrame <- data.frame(xmin = genes[1, ], xmax = genes[2, ],
-                                 ymin = rep(min(dfQuantile[, 2]) - 0.1, length(genes[1, ])),
-                                 ymax = rep(max(dfQuantile[, 2]) + 0.1 , length(genes[1, 1])))
+  print(thresholdsTogetPolymorphicRegions)
+  print(c(mQ[1, 1], mQ[dim(mQ)[1], 2], mQ[dim(mQ)[1], 2], mQ[index1, 1]))
+  
+  if (drawThresholds)
+      dfQuantile <- rbind(dfQuantile, data.frame(x1 = c(mQ[1, 1], mQ[dim(mQ)[1], 2], mQ[dim(mQ)[1], 2],mQ[1, 1]),
+                                                 x2 = c(rep(thresholdsTogetPolymorphicRegions[1], 2),
+                                                        rep(thresholdsTogetPolymorphicRegions[2], 2)),
+                                                 
+                                                 Quantile = rep("Threshold", 4)))
+                            
+  p1 <- ggplot(data= dfQuantile, aes(x=x1, y=x2, group = Quantile, colour=Quantile)) + geom_line(size=cex) +
+      coord_cartesian(xlim = c(outputST, outputEND)) + theme(legend.position="top") + xlab(xlab) + ylab(ylabQuantile)
+  ##############Plot genes
+  print(p1)
 
-          p1 <- p1 + geom_rect(data = genesDataFrame,
-                               aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),alpha = 0.4, col = 'pink', fill = 'pink')
-           }
-      if (!is.null(geneNames)){
-          geneNamesDF <- data.frame(x = genes[1, ],
-                                y = rep(max(dfQuantile[, 2]) + 0.1 , length(genes[1, 1])),
-                                label = geneNames)
-      p1 <- p1 + geom_text(data = geneNamesDF, aes(x = x, y = y, label = label))
-          }
-      if (drawThresholds == TRUE){
-          dfQuantileThreshold1 <- data.frame(x = c(mQ[1, 1],  mQ[dim(mQ)[1], 2]),
-                                             y = c(rep(thresholdsTogetPolymorphicRegions[1], 2)))
-          dfQuantileThreshold2 <- data.frame(x = c(mQ[dim(mQ)[1], 2],mQ[1, 1]),
-                                             y = rep(thresholdsTogetPolymorphicRegions[2], 2))
-
-          p1 <- p1 + geom_line(data = dfQuantileThreshold1, aes(x = x, y = y), alpha = 0.3, fill = 'green', col = 'green', size = 0.8*cex)  +
-              geom_line(data = dfQuantileThreshold2, aes(x = x, y = y), alpha = 0.3, fill = 'green', col = 'green', size = 0.8*cex)
-          }
-
-      print(p1)
-  }
+  x1 = c(mQ[1, 1], mQ[dim(mQ)[1], 2], mQ[dim(mQ)[1], 2],mQ[1, 1])
+  x2 = c(rep(thresholdsTogetPolymorphicRegions[1], 2),
+                                                        rep(thresholdsTogetPolymorphicRegions[2], 2))
+  print(x1)
+  print(x2)
 
   #############Plot regions' sds####################################
-  if (typePlot == "SD"){
-      mSD <- mSD[index1:index2,]
-      dfSD <- data.frame(transtoDataFrame(x = mSD[, c(1, 2)],
-                                          y = mSD[, 3]))
-
-      p2 <- ggplot() + geom_line(data= dfSD, aes(x=x1, y=x2), size=cex, col = 'blue') +
-          coord_cartesian(xlim = c(outputST, outputEND)) + xlab(xlab) + ylab(ylabSD)
-      if (!is.null(genes)){
-          genesDataFrame <- data.frame(xmin = genes[1, ], xmax = genes[2, ],
-                                       ymin = rep(min(dfSD[, 2]) - 0.1, length(genes[1, ])),
-                                       ymax = rep(max(dfSD[, 2]) + 0.1 , length(genes[1, 1])))
-          p2 <- p2 + geom_rect(data = genesDataFrame,
-                               aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),alpha = 0.4, col = 'pink', fill = 'pink')
-           }
-      if (!is.null(geneNames)){
-          geneNamesDF <- data.frame(x = genes[1, ],
-                                    y = rep(max(dfSD[, 2]) + 0.1 , length(genes[1, 1])),
-                                    label = geneNames)
-
-          p2 <- p2 + geom_text(data = geneNamesDF, aes(x = x, y = y, label = label))
-          }
-      print(p2)
-  }
+  mSD <- mSD[index1:index2,]
+  dfSD <- data.frame(transtoDataFrame(x = mSD[, c(1, 2)],
+                                      y = mSD[, 3]))
+  
+  p2 <- ggplot(data= dfSD, aes(x=x1, y=x2)) + geom_line(size=cex) +
+      coord_cartesian(xlim = c(outputST, outputEND)) + xlab(xlab) + ylab(ylabSD) 
+  print(p2)
 
             
   ######################Identity polymorphic regions##################

@@ -3,7 +3,7 @@
 \alias{ccl3l1data}
 \title{Data of CCL3L1 gene (The 1000 Genomes Project)}
 \description{
-This data set includes: segmentation results, population information and CN.
+This data set includes: segmentation results, population information and CCL3L1 CN.
 }
 \usage{
 data(ccl3l1data)
@@ -17,5 +17,5 @@ and \emph{CN} (CCL3L1 CN obtained by using a Bayesian clustering approach with E
 \url{www.1000genomes.org}
 }
 
-\keyword{datasets}
+\keyword{datasets, CCL3L1 CN}
 

@@ -8,7 +8,14 @@ setClass("CNVrd2",
                    dirBamFile = NA_character_, 
                    dirCoordinate = NA_character_,
                    genes = NULL,
-                   geneNames = NA_character_))
+                   geneNames = NA_character_),
+	validity=function(object){
+		if (length(object@genes)%%2 != 0)
+		stop("Genes' coordinates should include start and end values")
+		else TRUE
+		}
+
+		)
 
 setClassUnion("numericOrNULL", c("numeric","NULL"))
 
@@ -19,4 +26,6 @@ setClass("clusteringCNVs", representation(x = "numeric", k = "numeric", p = "num
                                            verbose = "logical", groupDistance = "numericOrNULL"),
          prototype(x = NULL, k = 3, p = NULL, m = NULL, sigma = NULL, small = 1e-4,
                    nMax = 50, EV = FALSE, eee = .Machine$double.eps,
-                   nmaxInit = 100, nChangeVariance = 3, verbose = FALSE, groupDistance = 0.25))
+                   nmaxInit = 100, nChangeVariance = 3, verbose = FALSE, groupDistance = 0.25)
+        
+	)
