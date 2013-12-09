@@ -60,7 +60,8 @@ calculateLDSNPandCNV <- function(sampleCNV = NULL,
         }
     #############Remove duplicate rows################################
     snp.matrix <- snp.matrix[!duplicated(snp.matrix),]
-    ############Match samples measured CNVs with samples in the VCF file
+
+############Match samples measured CNVs with samples in the VCF file
 
     calcPandR2 <- function(kk) {
       samples <- sampleCNV[sampleCNV[, popColumn] == kk,]
@@ -77,13 +78,16 @@ calculateLDSNPandCNV <- function(sampleCNV = NULL,
         stop(paste("No samples of the population ", kk, "\n Please check the column cnvColumn", sep = ""))
       message("Calculating p and r2 values for ", kk, " population.")
       samples <- samples[order(samples[, cnvColumn]), ]
-      colMatch <- pmatch(samples[, 1], colnames(snp.matrix))
+
+      ##Finding samples that are in snp.matrix and in the CN list.
+      colMatch <- pmatch(samples[, 1], colnames(snp.matrix)) 
       colMatch <- colMatch[!is.na(colMatch)]
-    ############Keep only one population##############################
+      
+    ############Keep only one population: snpMatrixPop##############################
       snpMatrixPop <- snp.matrix[, colMatch]
       samples <- samples[pmatch(colnames(snpMatrixPop), samples[, 1]), ]
-    #######################################################################
-    ######################################################################
+     #######################################################################
+      ######################################################################
     ####Calculate p and r2 values########################################
       pv0 <- c()
       cov <- c()
@@ -91,16 +95,26 @@ calculateLDSNPandCNV <- function(sampleCNV = NULL,
       nameSamples <- colnames(snpMatrixPop)
       cnv.number <- samples[, cnvColumn]
       names(cnv.number) <- nameSamples
+      ###########################################################
       snpMatrixPopT <- apply(snpMatrixPop, 2, function(x)
                              ifelse((x == "0|0") | (x == "0/0"), 0,
                                     ifelse((x == "1|1") | (x == "1/1"), 2, 1)))
-      if (codeSNP == "Two")
-        snpMatrixPopT <- apply(snpMatrixPopT, 2, function(x)
+
+           ###Keep a matrix to calculate proportions
+     if (is.null(dim(snpMatrixPopT)[2]))
+          return(NULL)
+      else {
+
+      snpMatrixPopTemp <- apply(snpMatrixPopT, 2, function(x)
                                ifelse(x == 0, 0, 1))
+      if (codeSNP == "Two")
+          snpMatrixPopT <- snpMatrixPopTemp
+
       LDandP <- function(x){
         x1 <- ifelse(x == 0, 0, 1)
         tableCode <- table(x1, cnv.number)
-        valueReturn <- c(NA, NA)
+        
+        valueReturn <- c(10, -2) ##Pseudo return values
         if (nrow(tableCode) > 1){
           if (ncol(tableCode) > 1){
             result <- try(pv0 <- fisher.test(tableCode, workspace=2e+7,hybrid=TRUE)$p.value)
@@ -109,15 +123,21 @@ calculateLDSNPandCNV <- function(sampleCNV = NULL,
                     }
 
             cov0 <- cor(x, cnv.number, method = "spearman")
+
+            valueReturn <- c(pv0, cov0)
                 }
-          valueReturn <- c(pv0, cov0)
+          
           }
         return(valueReturn)
         }
       resultPandR2 <- t(apply(snpMatrixPopT, 1, LDandP))
       rownames(resultPandR2) <- rownames(snpMatrixPopT)
+      #####################################################
+      ###Return the original matrix
+      snpMatrixPopT <- snpMatrixPopTemp
     #########################################################
       resultPandR2 <- resultPandR2[!is.na(resultPandR2[, 1]),]
+
       pv0 <- resultPandR2[, 1]
       pv1 <- p.adjust(pv0, method = "BH")
       pv <- data.frame(resultPandR2, pv1, resultPandR2[, 2]^2)
@@ -137,12 +157,19 @@ calculateLDSNPandCNV <- function(sampleCNV = NULL,
         return(cnvFrequency)
         })
 
-      
+      if (!is.matrix(cnvTable))
+          pv <- NULL
+      else {
       cnvTable <- apply(cnvTable, 1, function(x) round(100*x, 2))
       pv <- cbind(cnvTable[pmatch(rownames(pv), rownames(cnvTable)),], pv, rep(kk, dim(pv)[1]))
       colnames(pv) <- c(paste(names(table(cnv.number)), "CN_(n=", table(cnv.number), ")", sep = ""),
                         "p.values", "r", "p.valuesAdjusted", "r2", "POP")
+      pv <- pv[pv[ , dim(pv)[2]-1] <= 1,  ]
       pv <- pv[order(pv[, dim(pv)[2]-1] , decreasing = TRUE),]
+
+  }
+      return(pv)
+  }
     }
     if (length(population) == 1)
       PandR2list <- calcPandR2(population)
