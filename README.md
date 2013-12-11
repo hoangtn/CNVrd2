@@ -15,6 +15,10 @@ Install the package
 
 Please see the file [**CNVrd2.pdf**](https://github.com/hoangtn/CNVrd2/blob/master/CNVrd2.pdf)
 
+Window users can use the link of the Bioconductor Project:
+
+http://www.bioconductor.org/packages/devel/bioc/html/CNVrd2.html
+
 #### Notes: using the 1000 Genomes data
 
 Please see the file [**using1000Genome.md**](https://github.com/hoangtn/CNVrd2/blob/master/using1000Genome.md) 
