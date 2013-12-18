@@ -1,11 +1,8 @@
-setGeneric("plotCNVrd2",
-           function(Object, ...){standardGeneric("plotCNVrd2")})
-
 setMethod("plotCNVrd2", "CNVrd2",
           function(Object, segmentObject = NULL,
                    sampleName = NULL, xlim = NULL, ylim = NULL, 
 			data1000Genomes = TRUE, geneColor = 'lightpink',
-			xlab = NULL, ylab = NULL){
+			xlab = NULL, ylab = NULL, main = NULL){
 ##Checking parameters
   st = Object@st
   en = Object@en
@@ -58,13 +55,15 @@ else {
     sampleName <- substr(sampleName, 1, 7)
   
 
+  if (is.null(main))
+	main <- paste(sampleName, "\nwindow = ", windows, sep = "")
 #####################################################3
 ###Plot#######################3
     plot(xCC, yCC, type='l',
          col = 'white',
          xlab= xlab,
          ylab= ylab,
-         main = paste(sampleName, "\nwindow = ", windows, sep = ""),
+         main = main,
          ylim = ylim,
          xlim = c(outputST, outputEND)
          )
