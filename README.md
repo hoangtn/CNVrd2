@@ -19,15 +19,16 @@ Window users can use the link of the Bioconductor Project:
 
 http://www.bioconductor.org/packages/devel/bioc/html/CNVrd2.html
 
+
 #### Notes: using the 1000 Genomes data
 
-Please see the file [**using1000Genome.md**](https://github.com/hoangtn/CNVrd2/blob/master/using1000Genome.md) 
+Please read information below or see the file [**using1000Genome.md**](https://github.com/hoangtn/CNVrd2/blob/master/using1000Genome.md) 
 
 
 
-# USING THE 1000 GENOMES DATA
+#### USING THE 1000 GENOMES DATA
 
-This note (below) describes some simple steps for using the data from the 1000 Genomes Project http://www.1000genomes.org/.
+This note describes some simple steps for using the data from the 1000 Genomes Project http://www.1000genomes.org/.
 
 ##   Bam files
 Download an index file
