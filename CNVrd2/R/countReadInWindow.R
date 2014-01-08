@@ -5,14 +5,12 @@ setMethod("countReadInWindow", "CNVrd2",
                    referenceGenome = "BSgenome.Hsapiens.UCSC.hg19",reference_fasta=NULL){
 
               if (correctGC){
-                  if(reference_fasta == NULL){
+                  if(is.null(reference_fasta)){
                   library(referenceGenome, character.only=TRUE)
-                    variable_name <- strsplit(referenceGenome,'.')[2]
+                    variable_name <- strsplit(referenceGenome,'.',fixed=T)[[1]][2]
                     do.call("<-",list(referenceGenome,get(variable_name)))
-                    print(referenceGenome)
                   } else{
                     referenceGenome = readDNAStringSet(reference_fasta,format="fasta")
-                    print(referenceGenome)
                 }
              }
               
@@ -82,8 +80,10 @@ setMethod("countReadInWindow", "CNVrd2",
                   gcContent <- function(){
                       message("Correcting the GC content")
                       chr <- as.character(chr)
-                      if(!is.null(reference_fasta)){
+                      if(is.null(reference_fasta)){
                       tempG <- unmasked(referenceGenome[[chr]])[(st):en]} else{
+                      print(chr)
+                      print(referenceGenome)
                       tempG  <- referenceGenome$chr[st:en]
     }
                       gc <- c()
