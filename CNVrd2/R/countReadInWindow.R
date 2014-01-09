@@ -9,7 +9,7 @@ setMethod("countReadInWindow", "CNVrd2",
                   library(referenceGenome, character.only=TRUE)
                     variable_name <- strsplit(referenceGenome,'.',fixed=T)[[1]][2]
                     do.call("<-",list(referenceGenome,get(variable_name)))
-                  } else{
+                  } else {
                     referenceGenome = readDNAStringSet(reference_fasta,format="fasta")
                 }
              }
@@ -82,9 +82,7 @@ setMethod("countReadInWindow", "CNVrd2",
                       chr <- as.character(chr)
                       if(is.null(reference_fasta)){
                       tempG <- unmasked(referenceGenome[[chr]])[(st):en]} else{
-                      print(chr)
-                      print(referenceGenome)
-                      tempG  <- referenceGenome$chr[st:en]
+                      tempG  <- do.call("$",list(referenceGenome,chr))[st:en]
     }
                       gc <- c()
                       temp <- seq(1, length(tempG), by = windows)
@@ -146,6 +144,6 @@ setMethod("countReadInWindow", "CNVrd2",
                          readCountMatrix <- apply(readCountMatrix, 2, function(x) (x -median(x))/sd(x))
                                                   readCountMatrix <- apply(readCountMatrix, 2, function(x) ifelse(is.nan(x), 0, x))
                        }
-                     }
-    return(readCountMatrix)
- }     )
+                 }
+return(readCountMatrix)
+}     )
