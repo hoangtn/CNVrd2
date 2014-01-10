@@ -2,11 +2,17 @@
 setMethod("countReadInWindow", "CNVrd2",
           function(Object, correctGC = FALSE, standardizingAllSamples = TRUE,
                    rawReadCount = FALSE, byGCcontent = 5,
-                   referenceGenome = "BSgenome.Hsapiens.UCSC.hg19"){
+                   referenceGenome = "BSgenome.Hsapiens.UCSC.hg19",reference_fasta=NULL){
 
               if (correctGC){
+                  if(is.null(reference_fasta)){
                   library(referenceGenome, character.only=TRUE)
-                  }
+                    variable_name <- strsplit(referenceGenome,'.',fixed=T)[[1]][2]
+                    do.call("<-",list(referenceGenome,get(variable_name)))
+                  } else {
+                    referenceGenome = readDNAStringSet(reference_fasta,format="fasta")
+                }
+             }
               
               windows = Object@windows
               chr = Object@chr
@@ -74,7 +80,10 @@ setMethod("countReadInWindow", "CNVrd2",
                   gcContent <- function(){
                       message("Correcting the GC content")
                       chr <- as.character(chr)
-                      tempG <- unmasked(Hsapiens[[chr]])[(st):en]
+                      if(is.null(reference_fasta)){
+                      tempG <- unmasked(referenceGenome[[chr]])[(st):en]} else{
+                      tempG  <- do.call("$",list(referenceGenome,chr))[st:en]
+    }
                       gc <- c()
                       temp <- seq(1, length(tempG), by = windows)
                       for (ii in 1:length(temp)){
@@ -135,6 +144,6 @@ setMethod("countReadInWindow", "CNVrd2",
                          readCountMatrix <- apply(readCountMatrix, 2, function(x) (x -median(x))/sd(x))
                                                   readCountMatrix <- apply(readCountMatrix, 2, function(x) ifelse(is.nan(x), 0, x))
                        }
-                     }
-    return(readCountMatrix)
- }     )
+                 }
+return(readCountMatrix)
+}     )
