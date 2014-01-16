@@ -142,6 +142,7 @@ for (kk in 1:nnn){
       cnaInter[cnaInter$Start > cnaInter$End, ] <- NA
       cnaInter <- cnaInter[!is.na(cnaInter$Start),]
       if (dim(cnaInter)[1] > 1)
+
         segScores <- 0
       else
         segScores <- cnaInter[, 3]

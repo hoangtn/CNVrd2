@@ -202,7 +202,7 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
                                       mQuantile = mQuantile,
                                       Vst = valueVST,
                                       mSD = mSD)
-      plotPolymorphicRegion(Object = objectCNVrd2,
+      plotPolymorphicRegion(Object = Object,
                             polymorphicRegionObject = polymorphicRegionObject,
                             xlim = c(outputST, outputEND),
                             drawThresholds = drawThresholds,
