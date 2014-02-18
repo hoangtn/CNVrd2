@@ -177,6 +177,7 @@ for (kk in 1:nnn){
       segScores <- 0
       dimRow <- dim(cnaInter)[1] ##Number of rows of results
 ######Sign of segmentation scores
+	print(cnaInter)
       signOfSS <- ifelse(as.numeric(cnaInter[, 3]) > testThreshold2Merge, 1,
                          ifelse(as.numeric(cnaInter[, 3]) <  -testThreshold2Merge, -1, 0))
 ##Checking the same sign

@@ -81,7 +81,7 @@ setMethod("countReadInWindow", "CNVrd2",
                       message("Correcting the GC content")
                       chr <- as.character(chr)
                       if(is.null(reference_fasta)){
-                      tempG <- unmasked(referenceGenome[[chr]])[(st):en]} else{
+                      tempG <- unmasked(Hsapiens[[chr]])[(st):en]} else{
                       tempG  <- do.call("$",list(referenceGenome,chr))[st:en]
     }
                       gc <- c()

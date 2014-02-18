@@ -15,6 +15,7 @@ setGeneric("segmentSamplesUsingPopInformation",
 setMethod("segmentSamplesUsingPopInformation", "CNVrd2",
           function(Object, rawReadCountMatrix, pops = NULL,
                    entireGene = FALSE, inputBamFile = FALSE,
+                   testThreshold2Merge = 0.25,
                     bThresholds = NULL,
 		alpha = 0.01, nperm = 10000, p.method = "hybrid", 
 		   min.width = 2, kmax = 25, nmin = 200, eta = 0.05, 
@@ -29,7 +30,7 @@ setMethod("segmentSamplesUsingPopInformation", "CNVrd2",
                 min.width <- min.width
                 bThresholds <- bThresholds
                 ObjectAllPops <- Object
-                
+                testThreshold2Merge <- testThreshold2Merge
                 rawReadCountMatrix <- rawReadCountMatrix
 
                 
@@ -57,12 +58,14 @@ setMethod("segmentSamplesUsingPopInformation", "CNVrd2",
  ################Obtain segmentation scores for all populations                    
                 allNotAdjustedResults <-
                     segmentSamples(Object = ObjectAllPops , stdCntMatrix = stdCntMatrix, entireGene = entireGene,
-                               inputBamFile = inputBamFile, bThresholds = bThresholds,
-                               alpha = alpha, min.width = min.width, 
-                                nperm = nperm, p.method = p.method,
-			kmax = kmax, nmin = nmin, eta = eta,
-			trim = trim, undo.splits = undo.splits, 
-                   undo.prune = undo.prune, undo.SD = undo.SD, verbose = verbose)
+                                   inputBamFile = inputBamFile,
+                                   testThreshold2Merge = testThreshold2Merge,
+                                   bThresholds = bThresholds,
+                                   alpha = alpha, min.width = min.width, 
+                                   nperm = nperm, p.method = p.method,
+                                   kmax = kmax, nmin = nmin, eta = eta,
+                                   trim = trim, undo.splits = undo.splits, 
+                                   undo.prune = undo.prune, undo.SD = undo.SD, verbose = verbose)
 
                 ssAllPopResults <- allNotAdjustedResults$segmentationScores
                 ssAllPopResultsAdjusted <- ssAllPopResults
@@ -89,9 +92,10 @@ setMethod("segmentSamplesUsingPopInformation", "CNVrd2",
                         ssSinglePopResults[[singlePop]] <-
                             segmentSamples(Object = ObjectAllPops, stdCntMatrix = popStdMatrixReadCount,
                                            entireGene = entireGene, inputBamFile = FALSE, bThresholds = bThresholds,
-					alpha = alpha, min.width = min.width, nperm = nperm, p.method = p.method,
-					kmax = kmax, nmin = nmin, eta = eta,
-					trim = trim, undo.splits = undo.splits, 
+                                           testThreshold2Merge = testThreshold2Merge,
+                                           alpha = alpha, min.width = min.width, nperm = nperm, p.method = p.method,
+                                           kmax = kmax, nmin = nmin, eta = eta,
+                                           trim = trim, undo.splits = undo.splits, 
 			                   undo.prune = undo.prune, undo.SD = undo.SD, verbose = verbose)$segmentationScores
                         
 		ssSinglePopFromAllPops <- ssAllPopResults[pmatch(rownames(ssSinglePopResults[[singlePop]]),

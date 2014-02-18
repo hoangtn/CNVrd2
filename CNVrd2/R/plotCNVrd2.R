@@ -69,7 +69,7 @@ else {
          )
 
           for(k in 1:ncol(genes)){
-            rect(genes[1, k], minGene, genes[2,k], maxGene ,col= geneColor)
+            rect(genes[1, k], ylim[1], genes[2,k], ylim[2] ,col= geneColor)
             if (is.null(geneNames))
               text(genes[2, k], maxGene, paste("Gene", k, sep = ""), col = 'blue', cex = 0.7, lwd = 1.1, srt= 90, pos = 2)
             else
