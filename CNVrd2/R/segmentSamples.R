@@ -71,6 +71,7 @@ return(fileTests1[sampleTest])
 #########################################################################
   ########Calculate observed read-count ratios for genes##################
   observedReadCountRatio <- matrix(0, ncol = ncol(genes), nrow = nnn)
+  rownames(observedReadCountRatio) <- bamFile
   if (inputBamFile == TRUE){
     for (cc in 1:ncol(genes)){
       for (ii in 1:nnn){
