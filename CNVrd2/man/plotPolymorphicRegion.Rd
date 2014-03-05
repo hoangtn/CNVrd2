@@ -24,7 +24,7 @@ plotPolymorphicRegion(Object, ...)
 
 \value{
   \item{putativeBoundary}{Putative boundaries of polymorphic regions
-    based on quantile values}
+    based on quantile values.}
 
 }
 \author{
