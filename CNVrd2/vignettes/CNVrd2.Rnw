@@ -403,42 +403,33 @@ CNVrd2 can also be used to identity CN polymorphic regions and the putative boun
 <<warnings=FALSE>>=
 fcgr3PolymorphicRegion <- identifyPolymorphicRegion(Object = objectCNVrd2,
                                                     segmentObject = resultSegment, 
-                                                    thresholdForPolymorphicRegions = c(0.75, 0.25),
                                                     plotLegend = FALSE)
 
 @ 
 
-To plot a small region around the gene, we use the funtion \emph{plotPolymorphicRegion}.
+To plot a small region around the gene, we use the funtion \emph{plotPolymorphicRegion}. Users can change \emph{typePlot} to only plot SDs or percentiles.
 
 
 <<'FCGR3polymorphc1', warning=FALSE, fig.cap = 'CN polymorphic region at FCGR3 locus, represented by quantiles of the distribution of segmentation scores across samples.'>>=
 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegionObject = fcgr3PolymorphicRegion,
                       xlim = c(161300000, 161800000), drawThresholds = TRUE,
-                      thresholdForPolymorphicRegions = c(0.75, 0.25))
+                      typePlot = "SD")
 
 @ 
 
 <<'FCGR3polymorphc2', warning=FALSE, fig.cap = 'CN polymorphic region at FCGR3 locus, represented by quantiles of the distribution of segmentation scores across samples.'>>=
 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegionObject = fcgr3PolymorphicRegion,
-                      xlim = c(161300000, 161800000), drawThresholds = TRUE,
-                      thresholdForPolymorphicRegions = c(0.9, 0.1))
-
+                      xlim = c(161300000, 161800000), sdThreshold = 0.05, drawThresholds = TRUE,
+                      typePlot = "SD")
 @ 
 
-The boundaries of polymorphic regions rely on the two parameters \emph{quantileValue} and \emph{thresholdForPolymorphicRegions}. We can set high \emph{thresholdForPolymorphicRegions} values to obtain only high-polymorphic regions (e.g., \emph{CCL3L1}), but it can omit some medium-polymorphic regions (e.g., \emph{FCGR3A/3B}). Figure \ref{fig:FCGR3polymorphc1} and  \ref{fig:FCGR3polymorphc2} depicts two different thresholds resulting in different polymorphic regions.
+Here, we are using standard deviations to identify polymorphic regions. Therefore, the putative boundaries of these regions rely on the parameter \emph{sdThreshold}. 
+Alternatively, users can use different percentiles to identify these regions. In that case, two parameters  \emph{quantileValue} and \emph{thresholdForPolymorphicRegions} can be used to adjust the boundaries of regions. For example, here we can set small \emph{sdThreshold} values to obtain only high-polymorphic regions (e.g., \emph{CCL3L1}), but it can omit some medium-polymorphic regions (e.g., \emph{FCGR3A/3B}). Figure \ref{fig:FCGR3polymorphc1} and  \ref{fig:FCGR3polymorphc2} depicts two different thresholds resulting in different polymorphic regions.
 
 
 In the function \emph{identifyPolymorphicRegion}, if we would like to obtain only polymorphic regions which differentiate between populations (e.g., to detect evidence of selection) then we can use the option \emph{VstTest=TRUE}. This option will calculate the Vst statistics \citep{redon2006global}. Users have to supply a vector which includes population information in \emph{popName}. The returned putative boundaries will be the intersection of polymorphic regions and regions having maxVst $>=$ \emph{thresholdVST}. 
 
-User can see standard deviations across sub-regions by using option \emph{typePlot = ``SD''}:
 
-<<'FCGR3polymorphcSD', warning=FALSE, fig.cap = 'CN polymorphic region at FCGR3 locus, represented by SD of segmentation scores across samples.'>>=
-plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegionObject = fcgr3PolymorphicRegion,
-                      xlim = c(161300000, 161800000), typePlot = "SD",
-                      thresholdForPolymorphicRegions = c(0.75, 0.25))
-
-
-@ 
 
 \section{Note}
 If we use the option \emph{entireGene = FALSE} in the step \emph{segmentation} then the pipeline will not refine the segmentation results (the results will be the same as the pipeline used in \cite{nguyen2013cnvrd}).

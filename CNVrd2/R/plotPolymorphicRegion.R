@@ -3,11 +3,13 @@ setGeneric("plotPolymorphicRegion",
 
 setMethod("plotPolymorphicRegion", "CNVrd2",
           function(Object, polymorphicRegionObject = NULL,
-                                      xlim = NULL, typePlot = c("Quantile", "SD", "All"),
+                                      xlim = NULL, typePlot = c("All", "Quantile", "SD"),
                    xlab = NULL, ylabQuantile = NULL,
                    ylabSD = NULL,
                                       quantileValue = c(0.1, 0.5, 0.9),
                                       quantileColor = NULL, textSize = 0.7,
+                   polymorphicCriteria = c("SD", "Quantile"),
+		sdThreshold = 0.1,
                                       thresholdForPolymorphicRegions =
                                       c(0.975, 0.025),
                                       drawThresholds = FALSE,
@@ -51,9 +53,9 @@ setMethod("plotPolymorphicRegion", "CNVrd2",
 
 
   if (is.null(ylabQuantile))
-      ylabQuantile <- "Segmentation-score quantile"
+      ylabQuantile <- "Quantile"
   if (is.null(ylabSD))
-      ylabSD <- "Segmentation-score SD"
+      ylabSD <- "SD"
   
   if (is.null(xlab))
       xlab <- paste(chr, ":", outputST, "-", outputEND, sep = "")
@@ -167,6 +169,15 @@ setMethod("plotPolymorphicRegion", "CNVrd2",
                                     label = geneNames)
 
           p2 <- p2 + geom_text(data = geneNamesDF, aes(x = x, y = y, label = label), angle = 90, size = textSize)
+
+           if (drawThresholds == TRUE){
+                dfSDtemp <- data.frame(x = c(mSD[1, 1],  mSD[dim(mSD)[1], 2]),
+                                             y = c(rep(quantile(mSD[, 3], 1 - sdThreshold), 2)))
+                 p2 <- p2 + geom_line(data = dfSDtemp, aes(x = x, y = y), alpha = 0.3, fill = 'green', col = 'green', size = 0.8*cex)
+                
+                
+
+           }
           }
 
     if (typePlot == "Quantile")
@@ -184,15 +195,24 @@ setMethod("plotPolymorphicRegion", "CNVrd2",
             
   ######################Identity polymorphic regions##################
   ##Extract the first and the last rows of quantile matrixes
-  lowBoundary   <- listQ[[1]][listQ[[1]][, 3] <= quantile(listQ[[1]][, 3],
+  if (polymorphicCriteria != "SD"){
+      lowBoundary   <- listQ[[1]][listQ[[1]][, 3] <= quantile(listQ[[1]][, 3],
                                             thresholdForPolymorphicRegions[1]), ]
-  highBoundary <- listQ[[nQuantile]][listQ[[nQuantile]][, 3] >=
+      highBoundary <- listQ[[nQuantile]][listQ[[nQuantile]][, 3] >=
                                      quantile(listQ[[nQuantile]][, 3],
                                               thresholdForPolymorphicRegions[2]), ]
 
-  lowBoundary <- reduce(IRanges(lowBoundary[, 1], lowBoundary[, 2]))
-  highBoundary <- reduce(IRanges(highBoundary[, 1], highBoundary[, 2]))
-  unionBoundary <- reduce(union(lowBoundary, lowBoundary))
+      lowBoundary <- reduce(IRanges(lowBoundary[, 1], lowBoundary[, 2]))
+      highBoundary <- reduce(IRanges(highBoundary[, 1], highBoundary[, 2]))
+      unionBoundary <- reduce(union(lowBoundary, lowBoundary))
+  }
+  else {
+      tempSD <- as.data.frame(mSD)
+      tempSD <- tempSD[tempSD[, 3] >= quantile(tempSD[, 3], 1 - sdThreshold),]
+      unionBoundary <- reduce(IRanges(tempSD[, 1], tempSD[, 2]))
+
+
+  }
 
   end(unionBoundary) <- end(unionBoundary) - 1
 
