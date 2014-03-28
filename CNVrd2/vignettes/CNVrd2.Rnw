@@ -215,32 +215,37 @@ The data set used here includes 1,917 samples of five large populations European
   \hline\hline \\
   Large Pop & Small Pop & Sample size \\
   \hline\hline
-Americas & ACB & 74\\
-Americas & ASW & 50\\
+
 Americas & CLM & 65\\
 Americas & MXL & 59\\
 Americas & PEL & 60\\
 Americas & PUR & 74\\
+
 East Asian & CDX & 88\\
 East Asian & CHB & 83\\
 East Asian & CHS & 104\\
 East Asian & JPT & 82\\
 East Asian & KHV & 78\\
+
 European & CEU & 96\\
 European & FIN & 78\\
 European & GBR & 77\\
 European & IBS & 77\\
 European & TSI & 100\\
+
 South Asian & BEB & 50\\
 South Asian & GIH & 81\\
 South Asian & ITU & 39\\
 South Asian & PJL & 37\\
 South Asian & STU & 49\\
-West African & ESN & 64\\
-West African & GWD & 105\\
-West African & LWK & 90\\
-West African & MSL & 68\\
-West African & YRI & 89\\
+
+African  & ACB & 74\\
+African & ASW & 50\\
+African & ESN & 64\\
+African & GWD & 105\\
+African & LWK & 90\\
+African & MSL & 68\\
+African & YRI & 89\\
 \hline
 \end{tabular}
 
