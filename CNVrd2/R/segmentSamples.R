@@ -93,6 +93,7 @@ return(fileTests1[sampleTest])
     return(sum(x[, 3]*(x[, 2] - x[, 1] +1))/geneLength)}
   #######################TestSign################################3
   signTest <- function(x){
+      as.numeric(levels(as.factor(x)))
     signTest <- ifelse(x[1] > 0, 1, -1)
     for (i in 1:length(x)){
       if (x[i]*x[1] < 0){

@@ -1,0 +1,12 @@
+* installing *source* package ‘CNVrd2’ ...
+** R
+** data
+** inst
+** preparing package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+   ‘CNVrd2.Rnw’ using ‘UTF-8’ 
+** testing if installed package can be loaded
+* DONE (CNVrd2)

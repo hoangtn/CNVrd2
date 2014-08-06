@@ -1,0 +1,19 @@
+exportMethods(
+    "countReadInWindow",
+    "emnormalCNV",
+    "groupCNVs",
+    "plotCNVrd2",
+    "searchGroupCNVs",
+    "segmentSamples",
+    "segmentSamplesUsingPopInformation",
+    "identifyPolymorphicRegion",
+    "plotPolymorphicRegion"
+)
+exportClasses(
+    "clusteringCNVs",
+     "CNVrd2",
+     "numericOrNULL"
+     )
+export(calculateLDSNPandCNV)
+export(groupBayesianCNVs)
+import(IRanges)

@@ -50,6 +50,7 @@ setMethod("plotPolymorphicRegion", "CNVrd2",
     nQuantile <- length(quantileValue)
 
   typePlot <- match.arg(typePlot)
+  polymorphicCriteria <- match.arg(polymorphicCriteria)
 
 
   if (is.null(ylabQuantile))
