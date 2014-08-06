@@ -48,7 +48,7 @@ do
 samtools index $file
 
 ##Keep only read mapped
-sammtols view -F 4 $file -b > temp.bam
+samtools view -F 4 $file -b > temp.bam
 
 mv temp.bam $file
 done
