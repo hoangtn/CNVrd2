@@ -167,19 +167,19 @@ hr {
 
 <h4>Notes: using the 1000 Genomes data</h4>
 
-<p>Please read information below or see the file <a href="https://github.com/hoangtn/CNVrd2/blob/master/using1000Genome.md"><strong>using1000Genome.md</strong></a> </p>
+<p>Please read information below or see the file <a href="https://github.com/hoangtn/CNVrd2/blob/master/using1000Genome.md"><strong>using1000Genome</strong></a> </p>
+
+<p>Please go to <a href="https://github.com/hoangtn/CNVrd2/blob/master/QuestionsAndAnswers.md"><strong>QuestionsAndAnswers</strong></a> to take a quick look at asked questions about the package.</p>
 
 <hr/>
 
 <hr/>
-
-<p>Please go to <a href="#questions%20and%20answers">Questions and Answers</a></p>
 
 <h4>USING THE 1000 GENOMES DATA</h4>
 
 <p>This note describes some simple steps for using the data from the 1000 Genomes Project <a href="http://www.1000genomes.org/">http://www.1000genomes.org/</a>.</p>
 
-<h2>Bam files</h2>
+<h5>Bam files</h5>
 
 <p>Download an index file</p>
 
@@ -215,10 +215,10 @@ done &lt; listMXL.txt
 <pre><code>for file in $(ls *bam)
 do
 
-##Index bam file
+#####Index bam file
 samtools index $file
 
-##Keep only read mapped
+#####Keep only read mapped
 sammtols view -F 4 $file -b &gt; temp.bam
 
 mv temp.bam $file
@@ -227,7 +227,7 @@ done
 
 <p>A good website to understand SAM/BAM flags is <a href="http://picard.sourceforge.net/explain-flags.html">http://picard.sourceforge.net/explain-flags.html</a></p>
 
-<h2>VCF files</h2>
+<h5>VCF files</h5>
 
 <p>We can use <strong>samtools</strong> to obtain a vcf file (<a href="">Danecek et al. 2011</a> ) <a href="http://vcftools.sourceforge.net/">http://vcftools.sourceforge.net/</a> for all MXL samples above <strong><em>or</em></strong> we can use the SNP data of the 1000 Genomes Project.</p>
 
@@ -249,15 +249,13 @@ done
 tabix -p vcf chr1.161400000.161700000.vcf.gz
 </code></pre>
 
-<h2>References</h2>
+<h5>References</h5>
 
 <ul>
 <li>P. Danecek, A. Auton, G. Abecasis, C.A. Albers, E. Banks, M.A. DePristo, R.E. Handsaker, G. Lunter, G.T. Marth, S.T. Sherry,  others,   (2011) The variant call format and VCFtools.  <em>Bioinformatics</em>  <strong>27</strong>  (15)   2156-2158</li>
 <li>H. Li, B. Handsaker, A. Wysoker, T. Fennell, J. Ruan, N. Homer, G. Marth, G. Abecasis, R. Durbin,  others,   (2009) The sequence alignment/map format and SAMtools.  <em>Bioinformatics</em>  <strong>25</strong>  (16)   2078-2079</li>
 <li>Heng Li,   (2011) Tabix: fast retrieval of sequence features from generic TAB-delimited files.  <em>Bioinformatics</em>  <strong>27</strong>  (5)   718-719</li>
 </ul>
-
-<p>##Questions and Answers</p>
 
 </body>
 
