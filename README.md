@@ -24,13 +24,20 @@ http://www.bioconductor.org/packages/devel/bioc/html/CNVrd2.html
 
 Please read information below or see the file [**using1000Genome.md**](https://github.com/hoangtn/CNVrd2/blob/master/using1000Genome.md) 
 
+----------------------------------------------------
+----------------------------------------------------
 
 
-#### USING THE 1000 GENOMES DATA
+Please go to [Questions and Answers](#questions and answers)
+
+#### USING THE 1000 GENOMES DATA 
+
+
 
 This note describes some simple steps for using the data from the 1000 Genomes Project http://www.1000genomes.org/.
 
-##   Bam files
+## Bam files 
+
 Download an index file
 
 ```{}
@@ -111,3 +118,5 @@ tabix -p vcf chr1.161400000.161700000.vcf.gz
 - P. Danecek, A. Auton, G. Abecasis, C.A. Albers, E. Banks, M.A. DePristo, R.E. Handsaker, G. Lunter, G.T. Marth, S.T. Sherry,  others,   (2011) The variant call format and VCFtools.  <em>Bioinformatics</em>  <strong>27</strong>  (15)   2156-2158
 - H. Li, B. Handsaker, A. Wysoker, T. Fennell, J. Ruan, N. Homer, G. Marth, G. Abecasis, R. Durbin,  others,   (2009) The sequence alignment/map format and SAMtools.  <em>Bioinformatics</em>  <strong>25</strong>  (16)   2078-2079
 - Heng Li,   (2011) Tabix: fast retrieval of sequence features from generic TAB-delimited files.  <em>Bioinformatics</em>  <strong>27</strong>  (5)   718-719
+
+##Questions and Answers

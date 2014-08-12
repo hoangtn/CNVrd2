@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>USING THE 1000 GENOMES DATA</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<h1>USING THE 1000 GENOMES DATA</h1>
+
+<p>This note describes some simple steps for using the data from the 1000 Genomes Project <a href="http://www.1000genomes.org/">http://www.1000genomes.org/</a>.</p>
+
+<h2>Bam files</h2>
+
+<p>Download an index file</p>
+
+<pre><code>wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/alignment_indices/20130502.low_coverage.alignment.index
+</code></pre>
+
+<p>Obtain a list of bam files (the first column)</p>
+
+<pre><code>cat 20130502.low_coverage.alignment.index |awk &#39;{print $1}&#39;|grep &#39;\.mapped&#39; &gt; listbam.txt
+</code></pre>
+
+<p>There are 2535 bam files on the page <a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data/">ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data/</a>. Therefore, we can make a list of these bam files and their full links.</p>
+
+<pre><code>awk &#39;{print &quot;ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/&quot;$0}&#39; &lt; listbam.txt &gt; listbamAndFullLinks.txt
+</code></pre>
+
+<p>We can choose a population (or multiple populations) to find tagSNPs. For example, here we choose the Mexican Ancestry in Los Angeles (MXL) population and find tagSNPs for FCGR3B gene.</p>
+
+<pre><code>cat listbamAndFullLinks.txt|grep &quot;MXL&quot; &gt; listMXL.txt 
+</code></pre>
+
+<p>The gene is at chr1:161592986-161601753 <a href="http://www.ncbi.nlm.nih.gov/gene/2215">http://www.ncbi.nlm.nih.gov/gene/2215</a>, so we will use <strong>samtools</strong> (<a href="">Li et al. 2009</a> ) <a href="http://samtools.sourceforge.net/">http://samtools.sourceforge.net/</a> to download a 1Mb region around the gene: chr1:161100000-162100000.</p>
+
+<pre><code>while read line
+do
+tempName=$(echo $line|awk -F&quot;/&quot; &#39;{print $NF}&#39;)
+samtools view -hb $line 1:161100000-162100000 &gt; $tempName
+done &lt; listMXL.txt 
+</code></pre>
+
+<p>After downloading, we can use <strong>samtools</strong> to keep only reads mapped:</p>
+
+<pre><code>for file in $(ls *bam)
+do
+
+##Index bam file
+samtools index $file
+
+##Keep only read mapped
+samtools view -F 4 $file -b &gt; temp.bam
+
+mv temp.bam $file
+done
+</code></pre>
+
+<p>A good website to understand SAM/BAM flags is <a href="http://picard.sourceforge.net/explain-flags.html">http://picard.sourceforge.net/explain-flags.html</a></p>
+
+<h2>VCF files</h2>
+
+<p>We can use <strong>samtools</strong> to obtain a vcf file (<a href="">Danecek et al. 2011</a> ) <a href="http://vcftools.sourceforge.net/">http://vcftools.sourceforge.net/</a> for all MXL samples above <strong><em>or</em></strong> we can use the SNP data of the 1000 Genomes Project.</p>
+
+<p>Here, we use the data from the 1000 Genomes Project.</p>
+
+<p>All VCF files can be obtained from this page <a href="http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/">http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/</a></p>
+
+<p>We choose a region, for example chr1:161400000-161700000 flanking the FCGR3 gene to identify tagSNPs.</p>
+
+<p>Download and index the vcf file by using &ldquo;tabix&rdquo; and &ldquo;bgzip&rdquo; command lines in the <strong>tabix</strong> tool (<a href="">Li, 2011</a> ) <a href="http://samtools.sourceforge.net/tabix.shtml:">http://samtools.sourceforge.net/tabix.shtml:</a></p>
+
+<pre><code>tabix -h http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.chr1.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.vcf.gz 1:161400000-161700000  &gt; chr1.161400000.161700000.vcf
+</code></pre>
+
+<p>Index the file:</p>
+
+<pre><code>bgzip chr1.161400000.161700000.vcf -c &gt; chr1.161400000.161700000.vcf.gz
+
+tabix -p vcf chr1.161400000.161700000.vcf.gz
+</code></pre>
+
+<h2>References</h2>
+
+<ul>
+<li>P. Danecek, A. Auton, G. Abecasis, C.A. Albers, E. Banks, M.A. DePristo, R.E. Handsaker, G. Lunter, G.T. Marth, S.T. Sherry,  others,   (2011) The variant call format and VCFtools.  <em>Bioinformatics</em>  <strong>27</strong>  (15)   2156-2158</li>
+<li>H. Li, B. Handsaker, A. Wysoker, T. Fennell, J. Ruan, N. Homer, G. Marth, G. Abecasis, R. Durbin,  others,   (2009) The sequence alignment/map format and SAMtools.  <em>Bioinformatics</em>  <strong>25</strong>  (16)   2078-2079</li>
+<li>Heng Li,   (2011) Tabix: fast retrieval of sequence features from generic TAB-delimited files.  <em>Bioinformatics</em>  <strong>27</strong>  (5)   718-719</li>
+</ul>
+
+</body>
+
+</html>
+
