@@ -196,7 +196,7 @@ setMethod("plotPolymorphicRegion", "CNVrd2",
             
   ######################Identity polymorphic regions##################
   ##Extract the first and the last rows of quantile matrixes
-  if (polymorphicCriteria != "SD"){
+  if (polymorphicCriteria == "Quantile"){
       lowBoundary   <- listQ[[1]][listQ[[1]][, 3] <= quantile(listQ[[1]][, 3],
                                             thresholdForPolymorphicRegions[1]), ]
       highBoundary <- listQ[[nQuantile]][listQ[[nQuantile]][, 3] >=

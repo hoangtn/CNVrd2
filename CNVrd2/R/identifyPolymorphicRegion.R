@@ -39,6 +39,9 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
   chr = Object@chr
   genes <- Object@genes
   geneNames = Object@geneNames
+
+  polymorphicCriteria <- match.arg(polymorphicCriteria)
+  
   quantileValue <- sort(quantileValue)
 
     nQuantile <- length(quantileValue)
@@ -99,7 +102,8 @@ setMethod("identifyPolymorphicRegion", "CNVrd2",
       mQ <- mQ[(mQ[, 1] >= outputST) & (mQ[, 2] <=outputEND ), ]
   }
 
-  if (polymorphicCriteria != "SD"){
+      
+  if (polymorphicCriteria == "Quantile"){
       thresholdsTogetPolymorphicRegions <- c(quantile(listQ[[1]][, 3],
                                             thresholdForPolymorphicRegions[1]),
                                          quantile(listQ[[nQuantile]][, 3],
