@@ -381,10 +381,34 @@ Load VCF file into R and choose populations which we would like to find tagSNPs/
 ##Obtain vcf-file information in CNVrd2
 vcfFileCCL3L1 <- system.file(package="CNVrd2", "extdata",
                        "chr17.34800000.34830000.vcf.gz")
-##Set populations we would like to identify tagSNPs
-allPops <- c("TSI", "CEU", "GBR", "FIN", "IBS")
-@
+##Set populations we would like to identify tagSNPs. Here, we test for large populations
+largePop <- names(table(ccl3l1data[, 5]))
+
 <<warning = FALSE, results="hide">>=
+##Identify tag SNPs/INDELs
+tagSNPandINDELofCCL3L1forLargePops <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
+                                               vcfFile = vcfFileCCL3L1,
+                                               cnvColumn = 4,
+                                               population = largePop,
+                                               popColumn = 5, nChunkForVcf = 5,
+                                               chr = "17",
+                                               st = 34800000, en = 34830000)
+@ 
+
+Take a quick look some significant results (multiple populations: the return value of \emph{calculateLDSNPandCNV} is a list of populations).
+
+\small
+<<warnings=FALSE, size='tiny'>>=
+lapply(tagSNPandINDELofCCL3L1forLargePops, head)
+@ 
+
+The output above provides evidence that the European population has weak tag SNPs for CNV of the CCL3L1 gene. To better understand tag SNPs inside the European population, we can apply the test to small populations in this large population.
+
+
+<<warning = FALSE, results="hide">>=
+##Set populations we would like to identify tagSNPs. Here, we test for small populations
+allPops <- c("TSI", "CEU", "GBR", "FIN", "IBS")
+
 ##Identify tag SNPs/INDELs
 tagSNPandINDELofCCL3L1 <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
                                             vcfFile = vcfFileCCL3L1, cnvColumn = 4,
@@ -396,10 +420,10 @@ tagSNPandINDELofCCL3L1 <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
 Take a quick look some significant results (multiple populations: the return value of \emph{calculateLDSNPandCNV} is a list of populations).
 \small
 <<warnings=FALSE, size='tiny'>>=
-lapply(tagSNPandINDELofCCL3L1, head)
+lapply(tagSNPandINDELofCCL3L1, function(x) head(x, 15))
 @ 
 
-Th eoutput above provides evidence that 
+The output above provides evidence that 
 \emph{rs113877493} may be a tagSNP for \emph{CCL3L1} deletions in the FIN (p = 1.1e-07, $r^2$ = 0.44) and GBR (p = 2.6e-04, $r^2$ = 0.27) populations.
 
 \section{Indentifying poplymorphic regions}

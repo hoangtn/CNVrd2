@@ -43,13 +43,13 @@ setMethod("countReadInWindow", "CNVrd2",
                   return(table(ceiling(data/windows)))
                   }
               what <- c("pos")
-              param <- ScanBamParam( what = what)
+              param <- Rsamtools::ScanBamParam( what = what)
               numberofWindows <- ceiling((en - st + 1)/windows)
               seqStart <- seq(st, en, by = windows)[1:numberofWindows]
 
               ###Function to read Bam files and write out coordinates###############
               countReadForBamFile <- function(x){
-                    bam <- scanBam(paste(dirBamFile, bamFile[x], sep = ""),  param=param)[[1]]$pos
+                    bam <- Rsamtools::scanBam(paste(dirBamFile, bamFile[x], sep = ""),  param=param)[[1]]$pos
                     bam <- bam[!is.na(bam)]
 
                     

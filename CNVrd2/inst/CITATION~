@@ -1,0 +1,26 @@
+citHeader("To cite package 'CNVrd2' in publications use:")
+
+citEntry(entry="Article",
+         title="The CNVrd2 package: measurement of copy number at complex loci using high-throughput sequencing data",
+         author=personList(as.person("Hoang T. Nguyen"),
+                           as.person("Tony R. Merriman"),
+                           as.person("Michael A. Black")),
+         year="2014",
+         volume="5",
+         pages="248",
+         
+         journal="Frontiers in Genetics",
+         organization=paste("Biochemistry Department",
+                            "Otago University", sep=", "),
+         doi="10.3389/fgene.2014.00248",
+         url="http://journal.frontiersin.org/Journal/10.3389/fgene.2014.00248/abstract",
+         eprint="http://journal.frontiersin.org/Journal/10.3389/fgene.2014.00248/full",
+         textVersion =
+             paste("Guenter Klambauer, Karin Schwarzbauer, Andreas Mayr, Andreas Mitterecker, ",
+              		"Djork-Arne Clevert, Ulrich Bodenhofer, Sepp Hochreiter (2012) ",
+              	    "Nucleic Acids Research. DOI: 10.1093/nar/gks003.",sep="")
+         
+         )
+                   
+citFooter("To obtain the references in BibTex format, enter",
+          "'toBibtex(citation(\"CNVrd2\"))'")

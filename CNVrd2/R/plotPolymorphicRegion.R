@@ -23,14 +23,14 @@ setMethod("plotPolymorphicRegion", "CNVrd2",
   st = Object@st
   en = Object@en
   if (!is.null(xlim)){
-    if ((xlim[1] < st) | (xlim[2] > en))
-      stop("Please choose coordinates in the region")
-     if ((xlim[1] > en ) | (xlim[2] < st ))
-      stop("Please choose coordinates in the region")
+          if (xlim[1] < st)
+              xlim[1] <- st
+          if (xlim[2] > en)
+              xlim[2] <- en
+          outputST <- xlim[1]
+          outputEND <- xlim[2]
 
 
-    outputST <- xlim[1]
-    outputEND <- xlim[2]
     }
   else {
   outputST = st
