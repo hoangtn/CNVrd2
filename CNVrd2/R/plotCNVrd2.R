@@ -7,10 +7,14 @@ setMethod("plotCNVrd2", "CNVrd2",
   st = Object@st
   en = Object@en
   if (!is.null(xlim)){
-    if ((xlim[1] < st) | (xlim[2] > en))
-      stop("Please choose coordinates in the region")
-    if ((xlim[1] > en) | (xlim[2] < st))
-      stop("Please choose coordinates in the region")
+    if (xlim[1] < st){
+        xlim[1] <- st
+        message("Left coordinate is less than the start position")
+    }
+    if (xlim[2] > en){
+        xlim[2] <- en
+        message("Right coordiante is larger than the end position")
+    }
       
   outputST <- xlim[1]
   outputEND <- xlim[2]
@@ -69,7 +73,7 @@ else {
          )
 
           for(k in 1:ncol(genes)){
-            rect(genes[1, k], ylim[1], genes[2,k], ylim[2] ,col= geneColor)
+            rect(genes[1, k], ylim[1], genes[2, k], ylim[2] ,col= geneColor)
             if (is.null(geneNames))
               text(genes[2, k], maxGene, paste("Gene", k, sep = ""), col = 'blue', cex = 0.7, lwd = 1.1, srt= 90, pos = 2)
             else
