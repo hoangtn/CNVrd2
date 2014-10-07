@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.1.17)  29 MAR 2014 21:08
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.1.17)  7 OCT 2014 18:00
 entering extended mode
  %&-line parsing enabled.
 **\catcode126=12 \def\normaltilde{~}\catcode126=13 \let~\normaltilde  \input ./
@@ -657,18 +657,17 @@ LaTeX Font Info:    Try loading font information for T1+fi4 on input line 27.
  (/usr/share/texmf-texlive/tex/latex/inconsolata/t1fi4.fd
 File: t1fi4.fd 2009/05/28 T1/Inconsolata
 )
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 40.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 40.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 41.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 41.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 42.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 42.
 
 (/usr/share/texmf-texlive/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
-) (./Rd2.toc
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 1.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 1.
- [1
+) (./Rd2.toc [1
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}])
@@ -682,7 +681,7 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [3]
-Overfull \hbox (2.57655pt too wide) in paragraph at lines 146--147
+Overfull \hbox (2.57655pt too wide) in paragraph at lines 147--148
 []\T1/ptm/m/n/10 A log-i-cal value in-di-cat-ing whether mul-ti-cores are used 
 or NOT (de-fault: FALSE). 
  []
@@ -693,7 +692,7 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [5]
-Overfull \hbox (0.66539pt too wide) in paragraph at lines 278--280
+Overfull \hbox (0.66539pt too wide) in paragraph at lines 279--281
 []\T1/fi4/m/n/10 signature(Object = "clusteringCNVs")\T1/ptm/m/n/10 : clus-ter 
 seg-men-ta-tion scores into groups. 
  []
@@ -719,7 +718,7 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (51.44763pt too wide) in paragraph at lines 584--584
+Overfull \hbox (51.44763pt too wide) in paragraph at lines 585--585
  []\T1/fi4/m/n/10 groupBayesianCNVs(xData, nGroups, lambda0, sd0, alpha0, dista
 nceBetweenGroups, inits = NULL,[] 
  []
@@ -748,19 +747,19 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [19]
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1098--1098
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1099--1099
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
  []
 
 
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1105--1105
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1106--1106
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
  []
 
 
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1112--1112
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1113--1113
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
  []
@@ -777,7 +776,7 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [21]
-Overfull \hbox (30.78088pt too wide) in paragraph at lines 1257--1257
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1258--1258
  []\T1/fi4/m/n/9 ## Not run: resultSegment <- segmentSamples(Object = objectCNV
 rd2, stdCntMatrix = readCountMatrix)[] 
  []
@@ -863,9 +862,9 @@ r8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/
 texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/
 type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr
 i8a.pfb>
-Output written on Rd2.pdf (26 pages, 189491 bytes).
+Output written on Rd2.pdf (26 pages, 189763 bytes).
 PDF statistics:
- 609 PDF objects out of 1000 (max. 8388607)
+ 610 PDF objects out of 1000 (max. 8388607)
  241 named destinations out of 1000 (max. 500000)
  225 words of extra memory for PDF output out of 10000 (max. 10000000)
 

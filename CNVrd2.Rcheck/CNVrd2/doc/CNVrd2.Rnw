@@ -56,7 +56,7 @@ options(width=72)
 
 
 \section{Introduction}
-The \emph{CNVrd2} package \footnote{CNVrd2 is an improved version of the pipeline \emph{CNVrd} used to identify tagSNPs of \emph{FCGR3A/B} CNV} \citep{nguyen2013cnvrd} utilizes next-generation sequencing (NGS) data to measure human-gene copy number (CN) and identify single-nucleotide polymorphisms (SNPs), and insertions and deletions (INDELs) that are in linkage disequilibrium with a gene of interest.  Typically, the data being used are low- or medium-coverage whole genome sequence (WGS) data from multiple individuals in a population. Such data comprise collections of sequence reads that have been aligned (or "mapped") to an appropriate reference genome. Changes in read depth (i.e., the number of reads aligned to a specific region of the genome) can indicate changes in DNA copy number in this region (i.e., deletions or duplications of specific portions of DNA). If this region encompasses a gene, then changes in copy number may also be reflected by changes in gene activity - such changes have been shown to be associated with altered risk of disease in human populations, and altered trait distributions in agricultural settings.
+The \emph{CNVrd2} package \footnote{CNVrd2 is an improved version of the pipeline \emph{CNVrd} used to identify tagSNPs of \emph{FCGR3A/B} CNV} \citep{nguyen2014cnvrd2} utilizes next-generation sequencing (NGS) data to measure human-gene copy number (CN) and identify single-nucleotide polymorphisms (SNPs), and insertions and deletions (INDELs) that are in linkage disequilibrium with a gene of interest.  Typically, the data being used are low- or medium-coverage whole genome sequence (WGS) data from multiple individuals in a population. Such data comprise collections of sequence reads that have been aligned (or "mapped") to an appropriate reference genome. Changes in read depth (i.e., the number of reads aligned to a specific region of the genome) can indicate changes in DNA copy number in this region (i.e., deletions or duplications of specific portions of DNA). If this region encompasses a gene, then changes in copy number may also be reflected by changes in gene activity - such changes have been shown to be associated with altered risk of disease in human populations, and altered trait distributions in agricultural settings.
 
 To measure gene CN, \emph{CNVrd2} firstly divides a region (usually at least 1Mb) flanking a gene of interest into constant-sized windows, and counts reads mapped in these windows. Next, these read-count windows are transformed and standardized. After that, the \emph{DNAcopy} package \citep{venkatraman2007faster} is used to join the per-window standardized counts into regions (or "segments") of similar values. The package then refines the segmentation step and outputs segmentation results, namely segmentation scores (SS), for each sample. A function in the \emph{CNVrd2} package is then used to group SSs into copy-number groups.
 
@@ -202,7 +202,13 @@ tagSNPandINDELofMXL <- calculateLDSNPandCNV(sampleCNV = sampleCNV,
 <<warning=FALSE>>=
 head(tagSNPandINDELofMXL)
 @ 
-From the results of the LD analysis, \emph{rs117435514} is the best tagSNP for duplications: 0$\%$, 2.78$\%$ and 86.7$\%$ of deleted, normal and duplicated samples have this SNP (adjusted p-value = 7.1e-08, $r^2$ = 0.66).
+From the results of the LD analysis, \emph{rs117435514} is the best tagSNP for duplications: 0$\%$ (zero samples), 2.78$\%$ (one sample) and 86.7$\%$ (13 samples) of deleted, normal and duplicated samples have this SNP (adjusted p-value = 7.1e-08, $r^2$ = 0.66).
+
+We can write out all these tagSNP results:
+
+<<warning=FALSE, results="hide", eval=FALSE>>=
+write.table(tagSNPandINDELofMXL, "tagSNPandINDELofMXLatFCGR3B.csv", quote = FALSE, sep= ",")
+@ 
 
 \section{Working with complex loci}
 \emph{CNVrd2} can also be used to measure multiallelic copy-number polymorphisms. For loci having high CN, users should use the function \emph{segmentSamplesUsingPopInformation} to adjust the segmentation process across populations. An xample of a gene exhibiting this type of complex CN polymorphism is \emph{CCL3L1}. Below we use the package to measure \emph{CCL3L1} CN and identify tag SNPs/INDELs for \emph{CCL3L1} CNVs. 
@@ -253,7 +259,7 @@ African & YRI & 89\\
 
 
 \subsection{Measuring CCL3L1 CN}
-The \emph{ccl3l1data} data includes 1917 samples downloaded from the 1000 Genomes Project in October 2012 and March 2013, their corresponding populations, segmentation scores and CNs \footnote{Manuscript in preparation}. The segmentation scores were obtained by using the function \emph{segmentSamplesUsingPopInformation} for a 1Mb region (chr17:33670000-34670000) with 500bp-constant windows. 
+The \emph{ccl3l1data} data includes 1917 samples downloaded from the 1000 Genomes Project in October 2012 and March 2013, their corresponding populations, segmentation scores and CNs. The segmentation scores were obtained by using the function \emph{segmentSamplesUsingPopInformation} for a 1Mb region (chr17:33670000-34670000) with 500bp-constant windows. 
 
 <<'ccl3l1Histogram', warning=FALSE, fig.cap = 'CCL3L1 segmentation score.'>>=
 ##Load data into R:
@@ -381,10 +387,34 @@ Load VCF file into R and choose populations which we would like to find tagSNPs/
 ##Obtain vcf-file information in CNVrd2
 vcfFileCCL3L1 <- system.file(package="CNVrd2", "extdata",
                        "chr17.34800000.34830000.vcf.gz")
-##Set populations we would like to identify tagSNPs
-allPops <- c("TSI", "CEU", "GBR", "FIN", "IBS")
-@
+##Set populations we would like to identify tagSNPs. Here, we test for large populations
+largePop <- names(table(ccl3l1data[, 5]))
+@ 
 <<warning = FALSE, results="hide">>=
+##Identify tag SNPs/INDELs
+tagSNPandINDELofCCL3L1forLargePops <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
+                                               vcfFile = vcfFileCCL3L1,
+                                               cnvColumn = 4,
+                                               population = largePop,
+                                               popColumn = 5, nChunkForVcf = 5,
+                                               chr = "17",
+                                               st = 34800000, en = 34830000)
+@ 
+
+Take a quick look some significant results (multiple populations: the return value of \emph{calculateLDSNPandCNV} is a list of populations).
+
+\small
+<<warnings=FALSE, size='tiny'>>=
+lapply(tagSNPandINDELofCCL3L1forLargePops, head)
+@ 
+
+The output above provides evidence that the European population has weak tag SNPs for CNV of the CCL3L1 gene. To better understand tag SNPs inside the European population, we can apply the test to small populations in this large population.
+
+
+<<warning = FALSE, results="hide">>=
+##Set populations we would like to identify tagSNPs. Here, we test for small populations
+allPops <- c("TSI", "CEU", "GBR", "FIN", "IBS")
+
 ##Identify tag SNPs/INDELs
 tagSNPandINDELofCCL3L1 <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
                                             vcfFile = vcfFileCCL3L1, cnvColumn = 4,
@@ -396,11 +426,26 @@ tagSNPandINDELofCCL3L1 <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
 Take a quick look some significant results (multiple populations: the return value of \emph{calculateLDSNPandCNV} is a list of populations).
 \small
 <<warnings=FALSE, size='tiny'>>=
-lapply(tagSNPandINDELofCCL3L1, head)
+lapply(tagSNPandINDELofCCL3L1, function(x) head(x, 15))
 @ 
 
-Th eoutput above provides evidence that 
+The output above provides evidence that 
 \emph{rs113877493} may be a tagSNP for \emph{CCL3L1} deletions in the FIN (p = 1.1e-07, $r^2$ = 0.44) and GBR (p = 2.6e-04, $r^2$ = 0.27) populations.
+
+
+To write these results to csv files for populations, we can use the code below:
+
+<<warning=FALSE, results="hide", eval=FALSE>>=
+##Notice: these results are in a list
+for (ii in 1:length(tagSNPandINDELofCCL3L1forLargePops))
+    write.table(tagSNPandINDELofCCL3L1forLargePops[[ii]], 
+                paste("TagSNPforPop", ii, ".csv", sep = ""), 
+                quote = FALSE, sep = ",")
+
+@ 
+
+
+Note: All TagSNP results for DEFB103A, CCL3L1 and FCGR3B CNV will be uploaded on \url{https://github.com/hoangtn/CNVrd2}
 
 \section{Indentifying poplymorphic regions}
 CNVrd2 can also be used to identity CN polymorphic regions and the putative boundaries of these regions.  We reuse the data from the FCGR3 locus to investigate the polymorphic region around the two genes.

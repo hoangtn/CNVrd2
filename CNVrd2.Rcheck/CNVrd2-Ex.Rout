@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,9 +21,7 @@ Type 'q()' to quit R.
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
 > library('CNVrd2')
-Loading required package: DNAcopy
-Loading required package: Rsamtools
-Loading required package: IRanges
+Loading required package: VariantAnnotation
 Loading required package: BiocGenerics
 Loading required package: parallel
 
@@ -41,15 +39,25 @@ The following object is masked from ‘package:stats’:
 
 The following objects are masked from ‘package:base’:
 
-    Filter, Find, Map, Position, Reduce, anyDuplicated, as.data.frame,
-    cbind, colnames, duplicated, eval, get, intersect, lapply, mapply,
-    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int, rank,
-    rbind, rep.int, rownames, sapply, setdiff, sort, table, tapply,
-    union, unique, unlist
+    Filter, Find, Map, Position, Reduce, anyDuplicated, append,
+    as.data.frame, as.vector, cbind, colnames, duplicated, eval, evalq,
+    get, intersect, is.unsorted, lapply, mapply, match, mget, order,
+    paste, pmax, pmax.int, pmin, pmin.int, rank, rbind, rep.int,
+    rownames, sapply, setdiff, sort, table, tapply, union, unique,
+    unlist
 
 Loading required package: GenomicRanges
+Loading required package: IRanges
+Loading required package: XVector
+Loading required package: Rsamtools
 Loading required package: Biostrings
-Loading required package: VariantAnnotation
+
+Attaching package: ‘VariantAnnotation’
+
+The following object is masked from ‘package:base’:
+
+    tabulate
+
 Loading required package: rjags
 Loading required package: coda
 Loading required package: lattice
@@ -119,25 +127,9 @@ Class:     character       numeric     character
 +                                  codeSNP= "Three", codeCNV = "ThreeGroup")
 Reading the VCF file 1:161600000-161611000 with 5 blocks each
 VCF file: 161600000 to 161602750
-Warning in .bcfHeaderAsSimpleList(header) :
-  duplicate keys in header will be forced to unique rownames
-Warning in .bcfHeaderAsSimpleList(header) :
-  duplicate keys in header will be forced to unique rownames
 VCF file: 161602751 to 161605500
-Warning in .bcfHeaderAsSimpleList(header) :
-  duplicate keys in header will be forced to unique rownames
-Warning in .bcfHeaderAsSimpleList(header) :
-  duplicate keys in header will be forced to unique rownames
 VCF file: 161605501 to 161608250
-Warning in .bcfHeaderAsSimpleList(header) :
-  duplicate keys in header will be forced to unique rownames
-Warning in .bcfHeaderAsSimpleList(header) :
-  duplicate keys in header will be forced to unique rownames
 VCF file: 161608251 to 161611000
-Warning in .bcfHeaderAsSimpleList(header) :
-  duplicate keys in header will be forced to unique rownames
-Warning in .bcfHeaderAsSimpleList(header) :
-  duplicate keys in header will be forced to unique rownames
 Calculating p and r2 values for MXL population.
 Warning in data.row.names(row.names, rowsi, i) :
   some row.names duplicated: 8,10,20,22,24,25,26,30,35,36,38,40,44,45,50,53,59,61,62,63,64,65,67,68,69,71,73,77,78,84,85,87,89,90,93,94,95,97,99,103,104,105,106,107,111,113,118,119,121,122,123,124,127 --> row.names NOT used
@@ -504,7 +496,7 @@ sigma: 0.1469858562965880.1469858562965880.1469858562965880.146985856296588
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.316 1.092 12.548 0 0 
+Time elapsed:  9.424 1.156 10.737 0 0 
 > grDevices::dev.off()
 null device 
           1 

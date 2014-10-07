@@ -389,7 +389,7 @@ vcfFileCCL3L1 <- system.file(package="CNVrd2", "extdata",
                        "chr17.34800000.34830000.vcf.gz")
 ##Set populations we would like to identify tagSNPs. Here, we test for large populations
 largePop <- names(table(ccl3l1data[, 5]))
-
+@ 
 <<warning = FALSE, results="hide">>=
 ##Identify tag SNPs/INDELs
 tagSNPandINDELofCCL3L1forLargePops <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,

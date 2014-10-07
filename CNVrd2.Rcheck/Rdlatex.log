@@ -83,12 +83,12 @@ No file Rd2.aux.
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [1{/var/lib/texmf/fonts/map/
 pdftex/updmap/pdftex.map}] (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 [2]
-Overfull \hbox (2.57655pt too wide) in paragraph at lines 146--147
+Overfull \hbox (2.57655pt too wide) in paragraph at lines 147--148
 []\T1/ptm/m/n/10 A log-i-cal value in-di-cat-ing whether mul-ti-cores are used 
 or NOT (de-fault: FALSE). 
 [3] (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [4]
-Overfull \hbox (0.66539pt too wide) in paragraph at lines 278--280
+Overfull \hbox (0.66539pt too wide) in paragraph at lines 279--281
 []\T1/fi4/m/n/10 signature(Object = "clusteringCNVs")\T1/ptm/m/n/10 : clus-ter 
 seg-men-ta-tion scores into groups. 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [5]
@@ -98,7 +98,7 @@ seg-men-ta-tion scores into groups.
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [9]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
-Overfull \hbox (51.44763pt too wide) in paragraph at lines 584--584
+Overfull \hbox (51.44763pt too wide) in paragraph at lines 585--585
  []\T1/fi4/m/n/10 groupBayesianCNVs(xData, nGroups, lambda0, sd0, alpha0, dista
 nceBetweenGroups, inits = NULL,[] 
 [10] [11] [12] (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [13]
@@ -109,22 +109,22 @@ nceBetweenGroups, inits = NULL,[]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [16]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [17]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [18]
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1098--1098
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1099--1099
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
 
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1105--1105
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1106--1106
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
 
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1112--1112
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1113--1113
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [19]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [20]
-Overfull \hbox (30.78088pt too wide) in paragraph at lines 1257--1257
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1258--1258
  []\T1/fi4/m/n/9 ## Not run: resultSegment <- segmentSamples(Object = objectCNV
 rd2, stdCntMatrix = readCountMatrix)[] 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
@@ -140,7 +140,7 @@ ta.pfb></usr/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/shar
 e/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/font
 s/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/ut
 mr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (23 pages, 149216 bytes).
+Output written on Rd2.pdf (23 pages, 149504 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2009] (kpathsea + Thai support).
 Scanning input file Rd2.idx....done (83 entries accepted, 0 rejected).
@@ -231,12 +231,12 @@ mf/fonts/map/pdftex/updmap/pdftex.map}])
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 Overfull \vbox (3.94614pt too high) has occurred while \output is active
 [2] (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [3]
-Overfull \hbox (2.57655pt too wide) in paragraph at lines 146--147
+Overfull \hbox (2.57655pt too wide) in paragraph at lines 147--148
 []\T1/ptm/m/n/10 A log-i-cal value in-di-cat-ing whether mul-ti-cores are used 
 or NOT (de-fault: FALSE). 
 [4] (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [5]
-Overfull \hbox (0.66539pt too wide) in paragraph at lines 278--280
+Overfull \hbox (0.66539pt too wide) in paragraph at lines 279--281
 []\T1/fi4/m/n/10 signature(Object = "clusteringCNVs")\T1/ptm/m/n/10 : clus-ter 
 seg-men-ta-tion scores into groups. 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [6]
@@ -246,7 +246,7 @@ seg-men-ta-tion scores into groups.
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [10]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
-Overfull \hbox (51.44763pt too wide) in paragraph at lines 584--584
+Overfull \hbox (51.44763pt too wide) in paragraph at lines 585--585
  []\T1/fi4/m/n/10 groupBayesianCNVs(xData, nGroups, lambda0, sd0, alpha0, dista
 nceBetweenGroups, inits = NULL,[] 
 [11] [12] (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [13] [14]
@@ -257,22 +257,22 @@ nceBetweenGroups, inits = NULL,[]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [17]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [18]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [19]
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1098--1098
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1099--1099
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
 
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1105--1105
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1106--1106
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
 
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1112--1112
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1113--1113
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [20]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [21]
-Overfull \hbox (30.78088pt too wide) in paragraph at lines 1257--1257
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1258--1258
  []\T1/fi4/m/n/9 ## Not run: resultSegment <- segmentSamples(Object = objectCNV
 rd2, stdCntMatrix = readCountMatrix)[] 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
@@ -319,7 +319,7 @@ r/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texmf-tex
 live/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw
 /times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></
 usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (26 pages, 189009 bytes).
+Output written on Rd2.pdf (26 pages, 189281 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2009] (kpathsea + Thai support).
 Scanning input file Rd2.idx....done (83 entries accepted, 0 rejected).
@@ -409,12 +409,12 @@ Writing index file Rd2.idx
 mf/fonts/map/pdftex/updmap/pdftex.map}])
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [2]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [3]
-Overfull \hbox (2.57655pt too wide) in paragraph at lines 146--147
+Overfull \hbox (2.57655pt too wide) in paragraph at lines 147--148
 []\T1/ptm/m/n/10 A log-i-cal value in-di-cat-ing whether mul-ti-cores are used 
 or NOT (de-fault: FALSE). 
 [4] (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [5]
-Overfull \hbox (0.66539pt too wide) in paragraph at lines 278--280
+Overfull \hbox (0.66539pt too wide) in paragraph at lines 279--281
 []\T1/fi4/m/n/10 signature(Object = "clusteringCNVs")\T1/ptm/m/n/10 : clus-ter 
 seg-men-ta-tion scores into groups. 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [6]
@@ -424,7 +424,7 @@ seg-men-ta-tion scores into groups.
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [10]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
-Overfull \hbox (51.44763pt too wide) in paragraph at lines 584--584
+Overfull \hbox (51.44763pt too wide) in paragraph at lines 585--585
  []\T1/fi4/m/n/10 groupBayesianCNVs(xData, nGroups, lambda0, sd0, alpha0, dista
 nceBetweenGroups, inits = NULL,[] 
 [11] [12] (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [13] [14]
@@ -435,22 +435,22 @@ nceBetweenGroups, inits = NULL,[]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [17]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [18]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [19]
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1098--1098
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1099--1099
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
 
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1105--1105
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1106--1106
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
 
-Overfull \hbox (20.28088pt too wide) in paragraph at lines 1112--1112
+Overfull \hbox (20.28088pt too wide) in paragraph at lines 1113--1113
  []\T1/fi4/m/n/9 plotPolymorphicRegion(Object = objectCNVrd2, polymorphicRegion
 Object = fcgr3PolymorphicRegion,[] 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [20]
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def) [21]
-Overfull \hbox (30.78088pt too wide) in paragraph at lines 1257--1257
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1258--1258
  []\T1/fi4/m/n/9 ## Not run: resultSegment <- segmentSamples(Object = objectCNV
 rd2, stdCntMatrix = readCountMatrix)[] 
 (/usr/share/texmf-texlive/tex/latex/base/utf8.def)
@@ -497,8 +497,8 @@ r/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texmf-tex
 live/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw
 /times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></
 usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (26 pages, 189491 bytes).
+Output written on Rd2.pdf (26 pages, 189763 bytes).
 Transcript written on Rd2.log.
 Saving output to 'CNVrd2-manual.pdf' ...
 Done
-You may want to clean up by 'rm -rf /tmp/RtmpOB4ezo/Rd2pdf265f34aecf4e'
+You may want to clean up by 'rm -rf /tmp/RtmpxASVZB/Rd2pdf4898e61e0f5'

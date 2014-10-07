@@ -111,6 +111,10 @@ tagSNPandINDELofMXL <- calculateLDSNPandCNV(sampleCNV = sampleCNV,
 head(tagSNPandINDELofMXL)
 
 
+## ----warning=FALSE, results="hide", eval=FALSE---------------------------
+## write.table(tagSNPandINDELofMXL, "tagSNPandINDELofMXLatFCGR3B.csv", quote = FALSE, sep= ",")
+
+
 ## ----'ccl3l1Histogram', warning=FALSE, fig.cap = 'CCL3L1 segmentation score.'----
 ##Load data into R:
 data(ccl3l1data)
@@ -205,11 +209,28 @@ rownames(ccl3l1data) <- ccl3l1data[, 1]
 ##Obtain vcf-file information in CNVrd2
 vcfFileCCL3L1 <- system.file(package="CNVrd2", "extdata",
                        "chr17.34800000.34830000.vcf.gz")
-##Set populations we would like to identify tagSNPs
-allPops <- c("TSI", "CEU", "GBR", "FIN", "IBS")
+##Set populations we would like to identify tagSNPs. Here, we test for large populations
+largePop <- names(table(ccl3l1data[, 5]))
+
+## ----warning = FALSE, results="hide"-------------------------------------
+##Identify tag SNPs/INDELs
+tagSNPandINDELofCCL3L1forLargePops <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
+                                               vcfFile = vcfFileCCL3L1,
+                                               cnvColumn = 4,
+                                               population = largePop,
+                                               popColumn = 5, nChunkForVcf = 5,
+                                               chr = "17",
+                                               st = 34800000, en = 34830000)
+
+
+## ----warnings=FALSE, size='tiny'-----------------------------------------
+lapply(tagSNPandINDELofCCL3L1forLargePops, head)
 
 
 ## ----warning = FALSE, results="hide"-------------------------------------
+##Set populations we would like to identify tagSNPs. Here, we test for small populations
+allPops <- c("TSI", "CEU", "GBR", "FIN", "IBS")
+
 ##Identify tag SNPs/INDELs
 tagSNPandINDELofCCL3L1 <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
                                             vcfFile = vcfFileCCL3L1, cnvColumn = 4,
@@ -220,7 +241,16 @@ tagSNPandINDELofCCL3L1 <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
 
 
 ## ----warnings=FALSE, size='tiny'-----------------------------------------
-lapply(tagSNPandINDELofCCL3L1, head)
+lapply(tagSNPandINDELofCCL3L1, function(x) head(x, 15))
+
+
+## ----warning=FALSE, results="hide", eval=FALSE---------------------------
+## ##Notice: these results are in a list
+## for (ii in 1:length(tagSNPandINDELofCCL3L1forLargePops))
+##     write.table(tagSNPandINDELofCCL3L1forLargePops[[ii]],
+##                 paste("TagSNPforPop", ii, ".csv", sep = ""),
+##                 quote = FALSE, sep = ",")
+## 
 
 
 ## ----warnings=FALSE------------------------------------------------------
