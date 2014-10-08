@@ -202,13 +202,7 @@ tagSNPandINDELofMXL <- calculateLDSNPandCNV(sampleCNV = sampleCNV,
 <<warning=FALSE>>=
 head(tagSNPandINDELofMXL)
 @ 
-From the results of the LD analysis, \emph{rs117435514} is the best tagSNP for duplications: 0$\%$ (zero samples), 2.78$\%$ (one sample) and 86.7$\%$ (13 samples) of deleted, normal and duplicated samples have this SNP (adjusted p-value = 7.1e-08, $r^2$ = 0.66).
-
-We can write out all these tagSNP results:
-
-<<warning=FALSE, results="hide", eval=FALSE>>=
-write.table(tagSNPandINDELofMXL, "tagSNPandINDELofMXLatFCGR3B.csv", quote = FALSE, sep= ",")
-@ 
+From the results of the LD analysis, \emph{rs117435514} is the best tagSNP for duplications: 0$\%$, 2.78$\%$ and 86.7$\%$ of deleted, normal and duplicated samples have this SNP (adjusted p-value = 7.1e-08, $r^2$ = 0.66).
 
 \section{Working with complex loci}
 \emph{CNVrd2} can also be used to measure multiallelic copy-number polymorphisms. For loci having high CN, users should use the function \emph{segmentSamplesUsingPopInformation} to adjust the segmentation process across populations. An xample of a gene exhibiting this type of complex CN polymorphism is \emph{CCL3L1}. Below we use the package to measure \emph{CCL3L1} CN and identify tag SNPs/INDELs for \emph{CCL3L1} CNVs. 
@@ -387,34 +381,10 @@ Load VCF file into R and choose populations which we would like to find tagSNPs/
 ##Obtain vcf-file information in CNVrd2
 vcfFileCCL3L1 <- system.file(package="CNVrd2", "extdata",
                        "chr17.34800000.34830000.vcf.gz")
-##Set populations we would like to identify tagSNPs. Here, we test for large populations
-largePop <- names(table(ccl3l1data[, 5]))
-@ 
-<<warning = FALSE, results="hide">>=
-##Identify tag SNPs/INDELs
-tagSNPandINDELofCCL3L1forLargePops <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
-                                               vcfFile = vcfFileCCL3L1,
-                                               cnvColumn = 4,
-                                               population = largePop,
-                                               popColumn = 5, nChunkForVcf = 5,
-                                               chr = "17",
-                                               st = 34800000, en = 34830000)
-@ 
-
-Take a quick look some significant results (multiple populations: the return value of \emph{calculateLDSNPandCNV} is a list of populations).
-
-\small
-<<warnings=FALSE, size='tiny'>>=
-lapply(tagSNPandINDELofCCL3L1forLargePops, head)
-@ 
-
-The output above provides evidence that the European population has weak tag SNPs for CNV of the CCL3L1 gene. To better understand tag SNPs inside the European population, we can apply the test to small populations in this large population.
-
-
-<<warning = FALSE, results="hide">>=
-##Set populations we would like to identify tagSNPs. Here, we test for small populations
+##Set populations we would like to identify tagSNPs
 allPops <- c("TSI", "CEU", "GBR", "FIN", "IBS")
-
+@
+<<warning = FALSE, results="hide">>=
 ##Identify tag SNPs/INDELs
 tagSNPandINDELofCCL3L1 <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
                                             vcfFile = vcfFileCCL3L1, cnvColumn = 4,
@@ -426,24 +396,21 @@ tagSNPandINDELofCCL3L1 <- calculateLDSNPandCNV(sampleCNV = ccl3l1data,
 Take a quick look some significant results (multiple populations: the return value of \emph{calculateLDSNPandCNV} is a list of populations).
 \small
 <<warnings=FALSE, size='tiny'>>=
-lapply(tagSNPandINDELofCCL3L1, function(x) head(x, 15))
+lapply(tagSNPandINDELofCCL3L1, head)
 @ 
 
 The output above provides evidence that 
 \emph{rs113877493} may be a tagSNP for \emph{CCL3L1} deletions in the FIN (p = 1.1e-07, $r^2$ = 0.44) and GBR (p = 2.6e-04, $r^2$ = 0.27) populations.
 
 
-To write these results to csv files for populations, we can use the code below:
-
-<<warning=FALSE, results="hide", eval=FALSE>>=
+<<warning=FALSE, results="hide">>=
 ##Notice: these results are in a list
-for (ii in 1:length(tagSNPandINDELofCCL3L1forLargePops))
-    write.table(tagSNPandINDELofCCL3L1forLargePops[[ii]], 
+for (ii in 1:length(allPops))
+    write.table(tagSNPandINDELofCCL3L1[[ii]], 
                 paste("TagSNPforPop", ii, ".csv", sep = ""), 
                 quote = FALSE, sep = ",")
 
 @ 
-
 
 Note: All TagSNP results for DEFB103A, CCL3L1 and FCGR3B CNV will be uploaded on \url{https://github.com/hoangtn/CNVrd2}
 
@@ -482,7 +449,7 @@ In the function \emph{identifyPolymorphicRegion}, if we would like to obtain onl
 
 
 \section{Note}
-If we use the option \emph{entireGene = FALSE} in the step \emph{segmentation} then the pipeline will not refine the segmentation results (the results will be the same as the pipeline used in \cite{nguyen2013cnvrd}).
+If we use the option \emph{entireGene = TRUE} in the step \emph{segmentation} then the pipeline will not refine the segmentation results (the results will be the same as the pipeline used in \cite{nguyen2013cnvrd}).
 
 
 \section{Session information}
