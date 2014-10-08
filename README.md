@@ -89,7 +89,7 @@ mv temp.bam $file
 done
 ```
 
-A good website to understand SAM/BAM flags is http://picard.sourceforge.net/explain-flags.html
+A good website to understand SAM/BAM flags is http://broadinstitute.github.io/picard/explain-flags.html
 
 ##### VCF files
 
