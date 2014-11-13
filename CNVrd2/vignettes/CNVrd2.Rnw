@@ -267,7 +267,7 @@ As can be seen in Figure \ref{fig:ccl3l1Histogram}, the data is multimodal and t
 <<'EUccl3l1Histogram', warning=FALSE, fig.cap = 'European-ancestry segmentation score.'>>=
 xyEuro <- ccl3l1data[grep("CEU|TSI|IBS|GBR|FIN", ccl3l1data[, 2]), ]
 yEuro <- xyEuro[, 3]
-names(yEuro) <- rownames(xyEuro)
+names(yEuro) <- xyEuro[, 1]
 hist(yEuro, 100, xlab = '', main = '')
 
 @ 

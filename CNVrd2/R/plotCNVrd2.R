@@ -2,7 +2,8 @@ setMethod("plotCNVrd2", "CNVrd2",
           function(Object, segmentObject = NULL,
                    sampleName = NULL, xlim = NULL, ylim = NULL, 
 			data1000Genomes = TRUE, geneColor = 'lightpink',
-			xlab = NULL, ylab = NULL, main = NULL){
+			xlab = NULL, ylab = NULL, main = NULL, lwd = 0.5,
+                   cex = 1, segmentCEX = 3, segmentLWD = 3, segmentCOLOUR = 'green'){
 ##Checking parameters
   st = Object@st
   en = Object@en
@@ -80,12 +81,12 @@ else {
               text(genes[2, k], maxGene, geneNames[k], col = 'blue', cex = 0.7, lwd = 1.1, srt= 90, pos = 2)
             }
 
-          lines(xCC, yCC, lwd =0.5, cex = 0.5)
+          lines(xCC, yCC, lwd = lwd, cex = cex)
 
           abline(h = median(yCC))
           if (nrow(cna.out) > 0) {
             for (ii in 1:nrow(cna.out))
-              lines(cna.out[ii, 3:4], rep(cna.out[ii, 6], 2), col = 'green', cex = 2.5, lwd = 2.5)
+              lines(cna.out[ii, 3:4], rep(cna.out[ii, 6], 2), col = segmentCOLOUR, cex = segmentCEX, lwd = segmentLWD)
             }
 
         }

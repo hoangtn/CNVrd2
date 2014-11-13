@@ -42,7 +42,7 @@ setMethod("groupCNVs", "clusteringCNVs",
             x1Label <- data.frame(names(x1), apply(z, 1, getMax), z, x1)
             colnames(x1Label) <- c("Name", "Classification", paste("Group", 1:k, sep = ""), "score")
 ############Force outliers into the largest groups or smallest group###
-            x2 <- x[-pmatch(x1, x)]
+            x2 <- x[-pmatch(names(x1), names(x))]
             fx1 <- data.frame(names(x2), ifelse(x2 < leftLimit, 1, k),
                               ifelse(x2< leftLimit, 1, 0),
                               data.frame(matrix(0, nr = length(x2), ncol = k -2)),

@@ -178,7 +178,7 @@ groupBayesianCNVs <- function(xData, nGroups,
     colnames(xydata) <- c("Name", "Classification", paste("Group", 1:nGroups, sep = ""), "score")
 
 ############Force outliers into the largest groups or smallest group###
-            x2 <- x[-pmatch(xData, x)]
+            x2 <- x[-pmatch(names(xData), names(x))]
             fx1 <- data.frame(names(x2), ifelse(x2 < leftLimit, 1, nGroups),
                               ifelse(x2< leftLimit, 1, 0),
                               data.frame(matrix(0, nrow = length(x2), ncol = nGroups -2)),
