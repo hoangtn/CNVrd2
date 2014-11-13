@@ -11,7 +11,7 @@ Download the file
 
 Install the package
 
-> R CMD INSTALL CNVrd2_1.3.2.tar.gz
+> R CMD INSTALL CNVrd2_1.5.1.tar.gz
 
 Please see the file [**CNVrd2.pdf**](https://github.com/hoangtn/CNVrd2/blob/master/CNVrd2.pdf)
 
