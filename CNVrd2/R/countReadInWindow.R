@@ -1,6 +1,7 @@
 #This method counts number of reads in constant windows
 setMethod("countReadInWindow", "CNVrd2",
           function(Object, correctGC = FALSE, standardizingAllSamples = TRUE,
+                   qualityThreshold = 0,
                    rawReadCount = FALSE, byGCcontent = 1, useRSamtoolsToCount = FALSE,
                    referenceGenome = "BSgenome.Hsapiens.UCSC.hg19",reference_fasta=NULL){
 
@@ -42,16 +43,19 @@ setMethod("countReadInWindow", "CNVrd2",
 
                   return(table(ceiling(data/windows)))
                   }
-              what <- c("pos")
+              what <- c("pos", "mapq")
               param <- Rsamtools::ScanBamParam( what = what)
               numberofWindows <- ceiling((en - st + 1)/windows)
               seqStart <- seq(st, en, by = windows)[1:numberofWindows]
 
               ###Function to read Bam files and write out coordinates###############
               countReadForBamFile <- function(x){
-                    bam <- Rsamtools::scanBam(paste(dirBamFile, bamFile[x], sep = ""),  param=param)[[1]]$pos
+                    bam <- Rsamtools::scanBam(paste(dirBamFile, bamFile[x], sep = ""),  param=param)[[1]]
+                    allPos <- cbind(bam[[1]], bam[[2]])
+                    allPos <- allPos[as.numeric(allPos[, 2]) >= qualityThreshold,]
+                    bam <- allPos[, 1]
+                    
                     bam <- bam[!is.na(bam)]
-
                     
                     bam <- bam[(bam >= st) & (bam <= en)]
                     write.table(bam, paste(dirCoordinate, bamFile[x], ".coordinate.txt", sep = ""),
