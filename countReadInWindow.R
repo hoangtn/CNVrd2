@@ -105,51 +105,35 @@ setMethod("countReadInWindow", "CNVrd2",
                       tempG <- unmasked(Hsapiens[[chr]])[(st):en]} else{
                       tempG  <- do.call("$",list(referenceGenome,chr))[st:en]
     }
-                      sT <- seq(1, length(tempG), by = windows)
-
-                      gcSegment <- Views(tempG, sT, sT + windows - 1)
-                      gcContentInSegment <- apply(letterFrequency(gcSegment, letters = c("G", "C")), 1, sum)
-
-                      gcContentInSegment <- ifelse(is.na(gcContentInSegment), 0, gcContentInSegment)
-
-                      gcContentInSegment <- gcContentInSegment/windows
-
-                      return(gcContentInSegment)
+                      gc <- c()
+                      temp <- seq(1, length(tempG), by = windows)
+                      for (ii in 1:length(temp)){
+                          if (temp[ii] < (length(tempG) - windows))
+                                 gc[ii] <- sum(alphabetFrequency(tempG[temp[ii]:(temp[ii+1] - 1)], baseOnly= TRUE)[2:3])/windows
+                              else
+                              gc[ii] <- sum(alphabetFrequency(tempG[temp[ii]:length(tempG)], baseOnly= TRUE)[2:3])/windows
+                          }
+                      gc <- ifelse(is.na(gc), 0, gc)
+                      return(gc)
                       }
 ################################################################################
-                       gcn <- gcContent()
-                  
+                       gcn <- 100*gcContent()
                   gcn <- gcn[1:numberofWindows]
-
-
-                  gcList <- list()
-
+                                          
 
                        readCountMatrix <- readCountMatrix
                        nnn <- dim(readCountMatrix)[1]
                        readCountMatrix <- as.matrix(readCountMatrix)
                        cnt1 <- readCountMatrix
 ###Normalization GC content by median
-                  gcContentInSegment <- gcn*100
-
-                  windowByGCcontent <- seq(0, 100, by = byGCcontent)
-
-                  if (windowByGCcontent[length(windowByGCcontent)] <= 100)
-                      windowByGCcontent[length(windowByGCcontent)] <- 101
-                  dataframeToCorrect <- data.frame(windowByGCcontent[-length(windowByGCcontent)],
-                                 windowByGCcontent[-1])
-
-                  gcList <- apply(dataframeToCorrect, 1, function(x){
-                      tempMap <- which((gcContentInSegment >= x[1]) & (gcContentInSegment < x[2]))
-                      return(tempMap)
-                  })
-
-                  gcList <- unique(gcList)
-
-                  gcList <- gcList[lapply(gcList,length)>0]
-                  
+                  gcSeq <- seq(0, 100, by = byGCcontent)
+                  gcList <- list()
+                  for (ii in 2:length(gcSeq)){
+                      tempGC <- gcn[(gcn >= gcSeq[ii - 1]) & (gcn < gcSeq[ii])]
+                      if (length(tempGC) > 0){
+                          gcList[[ii]] <- pmatch(tempGC, gcn)
+                          }   }
                   lengthGC <- length(gcList)
-                  
                   correctGCforRow <- function(xRow){
                       medianAll <- median(xRow)
                       for (jj in 1:lengthGC){
