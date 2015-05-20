@@ -7,7 +7,7 @@
 
 Download the file 
 
-> CNVrd2_1.3.2.tar.gz
+> CNVrd2_1.5.1.tar.gz
 
 Install the package
 
