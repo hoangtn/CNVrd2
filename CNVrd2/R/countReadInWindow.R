@@ -104,10 +104,17 @@ setMethod("countReadInWindow", "CNVrd2",
                       if(is.null(reference_fasta)){
                       tempG <- unmasked(Hsapiens[[chr]])[(st):en]} else{
                           names(referenceGenome) <- toupper(names(referenceGenome))
+
+                          message("names(referenceGenome) ")
+                          print(names(referenceGenome))
                           
                           positionChr <- grep(toupper(chr), names(referenceGenome))
-                          
-                          tempG <- referenceGenome[positionChr][[toupper(chr)]][st:en]
+
+                          message("position: ")
+                          print(positionChr)
+                          tempG <- referenceGenome[positionChr]
+                          names(tempG) <- toupper(chr)
+                          tempG <- tempG[[toupper(chr)]][st:en]
     }
                       sT <- seq(1, length(tempG), by = windows)
 
