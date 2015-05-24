@@ -118,7 +118,12 @@ setMethod("countReadInWindow", "CNVrd2",
     }
                       sT <- seq(1, length(tempG), by = windows)
 
-                      gcSegment <- Views(tempG, sT, sT + windows - 1)
+                      endPos <- sT + windows - 1
+                      ####Change endPos if endPos is over end
+                      if (endPos[length(endPos)] > length(tempG))
+                          endPos[length(endPos)] <- length(tempG)
+                      
+                      gcSegment <- Views(tempG, sT, endPos)
                       gcContentInSegment <- apply(letterFrequency(gcSegment, letters = c("G", "C")), 1, sum)
 
                       gcContentInSegment <- ifelse(is.na(gcContentInSegment), 0, gcContentInSegment)
