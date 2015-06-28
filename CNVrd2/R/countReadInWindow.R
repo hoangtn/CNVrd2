@@ -3,6 +3,7 @@ setMethod("countReadInWindow", "CNVrd2",
           function(Object, correctGC = FALSE, standardizingAllSamples = TRUE,
                    qualityThreshold = 0,
                    rawReadCount = FALSE, byGCcontent = 1, useRSamtoolsToCount = FALSE,
+			writeCoordinate = TRUE,
                    referenceGenome = "BSgenome.Hsapiens.UCSC.hg19",reference_fasta=NULL){
 
               if (correctGC){
@@ -58,7 +59,8 @@ setMethod("countReadInWindow", "CNVrd2",
                     bam <- bam[!is.na(bam)]
                     
                     bam <- bam[(bam >= st) & (bam <= en)]
-                    write.table(bam, paste(dirCoordinate, bamFile[x], ".coordinate.txt", sep = ""),
+                    if (writeCoordinate)
+                        write.table(bam, paste(dirCoordinate, bamFile[x], ".coordinate.txt", sep = ""),
                                 col.names = FALSE, quote = FALSE, row.names = FALSE)
                     aa <- getWindows(data = bam, windows = windows, st = st)
                     if (length(aa) > numberofWindows)
@@ -108,7 +110,7 @@ setMethod("countReadInWindow", "CNVrd2",
                           message("names(referenceGenome) ")
                           print(names(referenceGenome))
                           
-                          positionChr <- grep(toupper(chr), names(referenceGenome))
+                          positionChr <- grep(toupper(chr), names(referenceGenome))[1]
 
                           message("position: ")
                           print(positionChr)
