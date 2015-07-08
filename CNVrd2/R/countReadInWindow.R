@@ -22,10 +22,11 @@ setMethod("countReadInWindow", "CNVrd2",
               en = Object@en
               dirBamFile = Object@dirBamFile
               dirCoordinate <- Object@dirCoordinate
-              
+
               if (is.na(dirCoordinate)){
-                  dir.create("TempAll")
-                  dirCoordinate <- "TempAll"}
+                  dirCoordinate <- "TempAll"
+                  dir.create(dirCoordinate)
+              }
               if (is.na(dirBamFile))
                   dirBamFile <- "./"
               if (substr(dirBamFile, length(dirBamFile), 1) != "/")

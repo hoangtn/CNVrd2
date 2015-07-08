@@ -19,6 +19,9 @@ Window users can use the link of the Bioconductor Project:
 
 http://www.bioconductor.org/packages/devel/bioc/html/CNVrd2.html
 
+####To detect CNVRs, please use the function SRBreak in:
+
+https://github.com/hoangtn/SRBreak/blob/master/TestSRBreak.ipynb
 
 #### Notes: using the 1000 Genomes data
 
