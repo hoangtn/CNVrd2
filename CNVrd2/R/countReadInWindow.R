@@ -3,7 +3,7 @@ setMethod("countReadInWindow", "CNVrd2",
           function(Object, correctGC = FALSE, standardizingAllSamples = TRUE,
                    qualityThreshold = 0,
                    rawReadCount = FALSE, byGCcontent = 1, useRSamtoolsToCount = FALSE,
-			writeCoordinate = TRUE,
+			writeCoordinate = TRUE, nCore = 1,
                    referenceGenome = "BSgenome.Hsapiens.UCSC.hg19",reference_fasta=NULL){
 
               if (correctGC){
@@ -72,6 +72,8 @@ setMethod("countReadInWindow", "CNVrd2",
                     names(tempRow) <- as.integer(c(1:numberofWindows))
                     tempRow[names(tempRow) %in% names(aa)] <- aa
                     message("Reading file: ", bamFile[x])
+   #                 tempRow <- c(bamFile[x], tempRow)
+#                    names(tempRow) <- bamFile[x]
                     return(tempRow)
                     }
               ####Read all Bam files#########################################
@@ -84,16 +86,22 @@ setMethod("countReadInWindow", "CNVrd2",
 
                   names(which) <- as.character(as.name(gsub("chr", "", objectCNVrd2@chr)))
                   param <- ScanBamParam( what = what, which = which)
-                  aa1 <- lapply(fileName, function(x) {
+                  aa1 <- mclapply(fileName, function(x) {
                       message("Reading: ", x)
-                      return(countBam(x, param = param)$records)
-                         })
+                      tempRow <- countBam(x, param = param)$records
+    #                  tempRow <- c(x, tempRow)
+                      return(tempRow)
+                         }, mc.cores = nCore)
                   readCountMatrix <-   do.call(rbind, aa1)
 
               } else {
-                  readCountMatrix <- do.call(rbind, lapply(1:length(bamFile), countReadForBamFile))
+                  readCountMatrix <- do.call(rbind, mclapply(1:length(bamFile), countReadForBamFile, mc.cores = nCore))
               }
               rownames(readCountMatrix) <- bamFile
+#              rownames(readCountMatrix) <-  readCountMatrix[, 1]
+ #             readCountMatrix <- readCountMatrix[, -1]
+
+  #            class(readCountMatrix) <- "numeric"
               message("=============================================")
               message(dim(readCountMatrix)[1], " bam files were read")
               message("=============================================")
