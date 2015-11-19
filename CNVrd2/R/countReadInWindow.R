@@ -113,7 +113,21 @@ setMethod("countReadInWindow", "CNVrd2",
                       message("Correcting the GC content")
                       chr <- as.character(chr)
                       if(is.null(reference_fasta)){
-                      tempG <- unmasked(Hsapiens[[chr]])[(st):en]} else{
+                      
+                        st1 <- seq(st, en, by = windows)
+                        
+                        if (max(st1) < en)
+                          st1 <- c(st1, en)
+                        st1[-c(1, length(st1))] <- st1[-c(1, length(st))] - 1
+                        
+                        gr1 <- GRanges(chr, IRanges(start = st1[-length(st1)], end = st1[-1]))
+                        system.time(b1 <- getSeq(BSgenome.Hsapiens.NCBI.GRCh38, gr1)) 
+                        
+                        gcContentInSegment <- apply(letterFrequency(b1, letters = c("G", "C")), 1, sum)
+                        
+                        gcContentInSegment <- ifelse(is.na(gcContentInSegment), 0, gcContentInSegment)
+                        
+                      } else{
                           names(referenceGenome) <- toupper(names(referenceGenome))
 
                           message("names(referenceGenome) ")
@@ -124,22 +138,25 @@ setMethod("countReadInWindow", "CNVrd2",
                           message("position: ")
                           print(positionChr)
                           tempG <- referenceGenome[positionChr]
-                          names(tempG) <- toupper(chr)
-                          tempG <- tempG[[toupper(chr)]][st:en]
+                          
+                          st1 <- seq(st, en, by = windows)
+                          
+                          if (max(st1) < en)
+                            st1 <- c(st1, en)
+                          st1[-c(1, length(st1))] <- st1[-c(1, length(st))] - 1
+                          
+                          gr1 <- GRanges(chr, IRanges(start = st1[-length(st1)], end = st1[-1]))
+                          system.time(b1 <- getSeq(tempG, gr1)) 
+                          
+                          gcContentInSegment <- apply(letterFrequency(b1, letters = c("G", "C")), 1, sum)
+                          
+                          gcContentInSegment <- ifelse(is.na(gcContentInSegment), 0, gcContentInSegment)
+                          
+                          
+                          
     }
-                      sT <- seq(1, length(tempG), by = windows)
-
-                      endPos <- sT + windows - 1
-                      ####Change endPos if endPos is over end
-                      if (endPos[length(endPos)] > length(tempG))
-                          endPos[length(endPos)] <- length(tempG)
-                      
-                      gcSegment <- Views(tempG, sT, endPos)
-                      gcContentInSegment <- apply(letterFrequency(gcSegment, letters = c("G", "C")), 1, sum)
-
-                      gcContentInSegment <- ifelse(is.na(gcContentInSegment), 0, gcContentInSegment)
-
-                      gcContentInSegment <- gcContentInSegment/windows
+    gcContentInSegment <- gcContentInSegment/windows
+    
 
                       return(gcContentInSegment)
                       }

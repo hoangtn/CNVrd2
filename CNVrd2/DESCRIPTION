@@ -1,9 +1,9 @@
 Package: CNVrd2
 Type: Package
 Title: CNVrd2: a read depth-based method to detect and genotype complex common copy number variants from next generation sequencing data.
-Version: 1.5.1
-Date: 2014-10-04
-Author: Hoang Tan Nguyen, Tony R Merriman and Mik Black
+Version: 1.9.1
+Date: 2015-11-17
+Author: Hoang T Nguyen, Tony R Merriman and Mik Black
 Depends: R (>= 3.0.0), methods, 
         VariantAnnotation, parallel, rjags, ggplot2, gridExtra
 VignetteBuilder: knitr
@@ -20,4 +20,4 @@ Collate: AllClasses.R AllGenerics.R countReadInWindow.R
         plotPolymorphicRegion.R emnormalCNV.R groupCNVs.R searchGroupCNVs.R
         groupBayesianCNVs.R plotCNVrd2.R calculateLDSNPandCNV.R
 URL: https://github.com/hoangtn/CNVrd2
-Packaged: 2014-10-04 07:02:44 UTC; root
+Packaged: 2014-11-17 07:02:44 UTC; root
