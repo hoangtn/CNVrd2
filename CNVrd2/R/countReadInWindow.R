@@ -118,10 +118,10 @@ setMethod("countReadInWindow", "CNVrd2",
                         
                         if (max(st1) < en)
                           st1 <- c(st1, en)
-                        st1[-c(1, length(st1))] <- st1[-c(1, length(st))] - 1
+                        st1[-c(1, length(st1))] <- st1[-c(1, length(st1))] - 1
                         
                         gr1 <- GRanges(chr, IRanges(start = st1[-length(st1)], end = st1[-1]))
-                        system.time(b1 <- getSeq(BSgenome.Hsapiens.NCBI.GRCh38, gr1)) 
+                        system.time(b1 <- getSeq(Hsapiens, gr1)) 
                         
                         gcContentInSegment <- apply(letterFrequency(b1, letters = c("G", "C")), 1, sum)
                         
@@ -143,7 +143,7 @@ setMethod("countReadInWindow", "CNVrd2",
                           
                           if (max(st1) < en)
                             st1 <- c(st1, en)
-                          st1[-c(1, length(st1))] <- st1[-c(1, length(st))] - 1
+                          st1[-c(1, length(st1))] <- st1[-c(1, length(st1))] - 1
                           
                           gr1 <- GRanges(chr, IRanges(start = st1[-length(st1)], end = st1[-1]))
                           system.time(b1 <- getSeq(tempG, gr1)) 
